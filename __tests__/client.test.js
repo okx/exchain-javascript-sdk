@@ -1,0 +1,74 @@
+import OKChainClient from "../src"
+import * as crypto from "../src/crypto"
+import { TokenClient } from "../src/tokenClient"
+
+
+
+const mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
+const privateKey = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
+const serverUrl = "http://localhost:26659"
+const userAddress = "okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k"
+const baseCoin = "tokt"
+
+
+
+describe("OKChainClient test", async () => {
+
+
+  it("get balance", async () => {
+    const client = new OKChainClient(serverUrl)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    const res = await client.getBalance(userAddress)
+    expect(res.length).toBeGreaterThanOrEqual(0)
+  })
+
+  it("send sendTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKChainClient(serverUrl)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    //console.log(addr)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendSendTransaction(userAddress, "1.00000000", baseCoin, "hello world", sequence)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+
+  it("send placeOrderTransaction,cancelOrderTransaction", async () => {
+    jest.setTimeout(20000)
+    const symbol = "xxb_" + baseCoin
+    const client = new OKChainClient(serverUrl)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    //console.log(addr)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+
+    const res1 = await client.sendPlaceOrderTransaction(symbol, "BUY", "1.00000000", "1.10000000", "",sequence)
+    console.log(JSON.stringify(res1))
+    expect(res1.status).toBe(200)
+
+
+    const orderId = res1.result.tags[1].value
+    console.log(orderId)
+    const res2 = await client.sendCancelOrderTransaction(orderId, "",sequence + 1)
+    console.log(JSON.stringify(res2))
+    expect(res2.status).toBe(200)
+
+  })
+  it("requestToken", async () => {
+    const client = new TokenClient("http://kong-proxy.dev-okex.svc.cluster.local:8443",privateKey)
+    //const client = new TokenClient("http://kong-proxy.test-d-okex.svc.test.local:8443",privateKey)
+    const res = await client.requestToken(1000000000)
+    console.log(res)
+    console.log(res.result.data)
+  })
+
+
+})
