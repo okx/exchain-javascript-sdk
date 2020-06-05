@@ -9,6 +9,8 @@ const privateKey = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa101
 const serverUrl = "http://localhost:26659"
 const userAddress = "okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k"
 const baseCoin = "tokt"
+const testCoin = "xxb-127"
+const testProduct = testCoin + "_" + baseCoin
 
 
 
@@ -40,7 +42,7 @@ describe("OKChainClient test", async () => {
 
   it("send placeOrderTransaction,cancelOrderTransaction", async () => {
     jest.setTimeout(20000)
-    const symbol = "xxb_" + baseCoin
+    const symbol = testProduct
     const client = new OKChainClient(serverUrl)
     const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
@@ -54,8 +56,9 @@ describe("OKChainClient test", async () => {
     console.log(JSON.stringify(res1))
     expect(res1.status).toBe(200)
 
-
-    const orderId = res1.result.tags[1].value
+    var patt = /ID[0-9]*-[0-9]*/
+    const orderId = patt.exec(JSON.stringify(res1))[0].toString()
+    //const orderId = res1.result.tags[1].value
     console.log(orderId)
     const res2 = await client.sendCancelOrderTransaction(orderId, "",sequence + 1)
     console.log(JSON.stringify(res2))
