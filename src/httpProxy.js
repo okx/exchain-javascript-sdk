@@ -17,7 +17,7 @@ class HttpProxy {
       .then(response => {
         return { result: response.data, status: response.status }
       }).catch(err => {
-        console.error("HttpProxy", err.response && err.response.data && JSON.parse(err.response.data.message))
+        console.error("HttpProxy", err.response && err.response.data)
       })
   }
 }

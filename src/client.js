@@ -18,13 +18,20 @@ const apiPath = {
 const chainId = "okchain"
 const bech32Head = "okchain"
 const mode = "block"
+const nativeDenom = "tokt"
+var defaultFee = {
+  amount: [{
+    amount: "0.02000000",
+    denom: nativeDenom,
 
-
+  }],
+  gas: "200000",
+}
 
 
 export const GetClient = async (privateKey,url) => {
   const client = new OKChainClient(url)
-  client.setPrivateKey(privateKey)
+  client.setAccountInfo(privateKey)
   return client
 }
 
@@ -83,7 +90,6 @@ export class OKChainClient {
 
   async sendSendTransaction(to, amount, denom, memo="", sequenceNumber=null) {
 
-
     const coin = {
       amount: amount,
       denom: denom,
@@ -91,26 +97,19 @@ export class OKChainClient {
     }
 
     const msg = [{
-      type: "token/Send",
+      type: "okchain/token/MsgTransfer",
       value: {
+        amount:[coin],
         from_address:this.address,
         to_address:to,
-        amount:[coin],
       },
     }]
 
-    const signMsg = [{
-      amount: [coin],
-      from_address: this.address,
-      to_address: to,
-    }]
+    const signMsg = msg
 
-    const fee = {
-      amount: [],
-      gas: "200000",
-    }
 
-    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo,fee)
+
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
     const res = await this.sendTransaction(signedTx)
     return res
   }
@@ -124,26 +123,24 @@ export class OKChainClient {
    */
 
   async sendCancelOrderTransaction(orderId, memo="", sequenceNumber=null) {
+    var orderIdList = [orderId]
+    return this.sendCancelOrdersTransaction(orderIdList, memo, sequenceNumber)
+  }
+
+  async sendCancelOrdersTransaction(orderIdList, memo="", sequenceNumber=null) {
     var msg = []
     var signMsg = []
-    const fee = {
-      amount: [],
-      gas: "200000",
-    }
 
     msg.push({
-      type: "order/cancel",
+      type: "okchain/order/MsgCancel",
       value: {
-        OrderId:orderId,
-        Sender:this.address,
+        order_ids:orderIdList,
+        sender:this.address,
       },
     })
-    signMsg.push({
-      OrderId:orderId,
-      Sender:this.address,
-    })
+    signMsg = msg
 
-    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo,fee)
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
     const res = await this.sendTransaction(signedTx)
     return res
   }
@@ -160,31 +157,28 @@ export class OKChainClient {
    * @return {Object} response
    */
   async sendPlaceOrderTransaction(product, side, price, quantity, memo="", sequence=null) {
+    var order_items = [{
+      price:price,
+      product:product,
+      quantity:quantity,
+      side:side,
+    }]
+    return this.sendPlaceOrdersTransaction(order_items, memo, sequence)
+  }
+
+  async sendPlaceOrdersTransaction(order_items, memo="", sequence=null) {
     const placeOrderMsg = [{
-      type:"order/new",
+      type:"okchain/order/MsgNew",
       value:{
-        Sender: this.address,
-        Product: product,
-        Side: side,
-        Price: price,
-        Quantity: quantity,
+        order_items:order_items,
+        sender: this.address,
       },
 
     }]
-    const fee = {
-      amount: [],
-      gas: "200000",
-    }
-    const signMsg = [{
-      Price: price,
-      Product: product,
-      Quantity: quantity,
-      Sender: this.address,
-      Side: side,
-    }]
+    const signMsg = placeOrderMsg
 
 
-    const signedTx = await this.buildTransaction(placeOrderMsg, signMsg, sequence, memo, fee)
+    const signedTx = await this.buildTransaction(placeOrderMsg, signMsg, sequence, memo, defaultFee)
     const res = await this.sendTransaction(signedTx)
     return res
   }
@@ -210,7 +204,7 @@ export class OKChainClient {
       memo: memo,
       msg,
       sequence: sequenceNumber,
-      //fee: fee,
+      fee: fee,
     }
 
     const tx = new Transaction(params)

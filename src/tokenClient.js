@@ -59,7 +59,7 @@ export class TokenClient {
 
   async requestUrl(method,path) {
     try {
-      const data = await this._httpClient.request(method, path)
+      const data = await this._httpClient.send(method, path)
       return data
     } catch(err) {
       console.warn(`request ${path} error`, err)
