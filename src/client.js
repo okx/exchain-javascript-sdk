@@ -303,4 +303,124 @@ export class OKChainClient {
     return accountInfo.result.value.account_number
   }
 
+  /**
+   * Send RegisterDexOperatorTransaction.
+   * @param {String} website
+   * @param {String} handling_fee_address
+   * @param {String} memo
+   * @param {Number} sequenceNumber
+   * @return {Object} response
+   */
+
+  async sendRegisterDexOperatorTransaction(website, handling_fee_address, memo="", sequenceNumber=null) {
+
+    const msg = [{
+      type: "okchain/dex/CreateOperator",
+      value: {
+        handling_fee_address: handling_fee_address,
+        owner: this.address,
+        website: website,
+      },
+    }]
+
+    const signMsg = msg
+
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
+    const res = await this.sendTransaction(signedTx)
+    return res
+  }
+
+  /**
+   * Send ListTokenPairTransaction.
+   * @param {String} base_asset
+   * @param {String} quote_asset
+   * @param {String} init_price
+   * @param {String} memo
+   * @param {Number} sequenceNumber
+   * @return {Object} response
+   */
+
+  async sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo="", sequenceNumber=null) {
+
+    const msg = [{
+      type: "okchain/dex/MsgList",
+      value: {
+        init_price: init_price,
+        list_asset: base_asset,
+        owner: this.address,
+        quote_asset: quote_asset,
+      },
+    }]
+
+    const signMsg = msg
+
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
+    const res = await this.sendTransaction(signedTx)
+    return res
+  }
+
+  /**
+   * Send AddProductDepositTransaction.
+   * @param {String} amount
+   * @param {String} product
+   * @param {String} memo
+   * @param {Number} sequenceNumber
+   * @return {Object} response
+   */
+
+  async sendAddProductDepositTransaction(amount, product, memo="", sequenceNumber=null) {
+
+    const coin = {
+      amount: amount,
+      denom: nativeDenom,
+    }
+
+    const msg = [{
+      type: "okchain/dex/MsgDeposit",
+      value: {
+        amount: coin,
+        depositor:this.address,
+        product:product,
+      },
+    }]
+
+    const signMsg = msg
+
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
+    const res = await this.sendTransaction(signedTx)
+    return res
+  }
+
+  /**
+   * Send WithdrawProductDepositTransaction.
+   * @param {String} amount
+   * @param {String} product
+   * @param {String} memo
+   * @param {Number} sequenceNumber
+   * @return {Object} response
+   */
+
+  async sendWithdrawProductDepositTransaction(amount, product, memo="", sequenceNumber=null) {
+
+    const coin = {
+      amount: amount,
+      denom: nativeDenom,
+    }
+
+    const msg = [{
+      type: "okchain/dex/MsgWithdraw",
+      value: {
+        amount: coin,
+        depositor:this.address,
+        product:product,
+      },
+    }]
+
+    const signMsg = msg
+
+    const signedTx = await this.buildTransaction(msg, signMsg, sequenceNumber, memo, defaultFee)
+    const res = await this.sendTransaction(signedTx)
+    return res
+  }
+
 }

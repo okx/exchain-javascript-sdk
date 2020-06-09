@@ -73,5 +73,48 @@ describe("OKChainClient test", async () => {
     console.log(res.result.data)
   })
 
+   async function  prepareAccount() {
+    const client = new OKChainClient(serverUrl)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+     return {
+       okclient:client,
+       sequence:sequence
+     }
+  }
 
+  it("send sendRegisterDexOperatorTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendRegisterDexOperatorTransaction("http://test.json", "okchain17xpfvakm2amg962yls6f84z3kell8c5ljresa7", "add deposit", data.sequence)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+
+  it("send sendListTokenPairTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendListTokenPairTransaction("tbtc-edc", "tusdk-d42","0.01000000", "list tokenpair", data.sequence)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+
+  it("send sendAddProductDepositTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendAddProductDepositTransaction("50.00000000", "tbtc-edc_tusdk-d42", "add deposit", data.sequence)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+
+  it("send sendWithdrawProductDepositTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendWithdrawProductDepositTransaction("40.00000000", "tbtc-edc_tusdk-d42", "withdraw deposit", data.sequence)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
 })
