@@ -7,17 +7,6 @@
 <dd></dd>
 </dl>
 
-## Classes
-
-<dl>
-<dt><a href="#HttpProxy">HttpProxy</a></dt>
-<dd><p>HttpProxy</p>
-</dd>
-<dt><a href="#Transaction">Transaction</a></dt>
-<dd><p>Transaction</p>
-</dd>
-</dl>
-
 <a name="module_client"></a>
 
 ## client
@@ -30,7 +19,7 @@
         * [.sendSendTransaction(to, amount, denom, memo, sequenceNumber)](#module_client.OKChainClient+sendSendTransaction) ⇒ <code>Object</code>
         * [.sendCancelOrderTransaction(orderId, memo, sequenceNumber)](#module_client.OKChainClient+sendCancelOrderTransaction) ⇒ <code>Object</code>
         * [.sendPlaceOrderTransaction(product, side, price, quantity, memo, sequence)](#module_client.OKChainClient+sendPlaceOrderTransaction) ⇒ <code>Object</code>
-        * [.buildTransaction(msg, signMsg, sequenceNumber, memo)](#module_client.OKChainClient+buildTransaction) ⇒ [<code>Transaction</code>](#Transaction)
+        * [.buildTransaction(msg, signMsg, memo, fee, sequenceNumber)](#module_client.OKChainClient+buildTransaction) ⇒ <code>Transaction</code>
         * [.sendTransaction(tx, mode)](#module_client.OKChainClient+sendTransaction) ⇒ <code>Object</code>
         * [.getAccount(address)](#module_client.OKChainClient+getAccount) ⇒ <code>Object</code>
         * [.getBalance(address)](#module_client.OKChainClient+getBalance) ⇒ <code>Object</code>
@@ -38,6 +27,13 @@
         * [.getSequenceNumber(address)](#module_client.OKChainClient+getSequenceNumber) ⇒ <code>Number</code>
         * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
         * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
+        * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+        * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
+        * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
+        * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
+        * [.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber)](#module_client.OKChainClient+sendListTokenPairTransaction) ⇒ <code>Object</code>
+        * [.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKChainClient+sendAddProductDepositTransaction) ⇒ <code>Object</code>
+        * [.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKChainClient+sendWithdrawProductDepositTransaction) ⇒ <code>Object</code>
 
 <a name="module_client.OKChainClient"></a>
 
@@ -53,7 +49,7 @@ The OKChain client.
     * [.sendSendTransaction(to, amount, denom, memo, sequenceNumber)](#module_client.OKChainClient+sendSendTransaction) ⇒ <code>Object</code>
     * [.sendCancelOrderTransaction(orderId, memo, sequenceNumber)](#module_client.OKChainClient+sendCancelOrderTransaction) ⇒ <code>Object</code>
     * [.sendPlaceOrderTransaction(product, side, price, quantity, memo, sequence)](#module_client.OKChainClient+sendPlaceOrderTransaction) ⇒ <code>Object</code>
-    * [.buildTransaction(msg, signMsg, sequenceNumber, memo)](#module_client.OKChainClient+buildTransaction) ⇒ [<code>Transaction</code>](#Transaction)
+    * [.buildTransaction(msg, signMsg, memo, fee, sequenceNumber)](#module_client.OKChainClient+buildTransaction) ⇒ <code>Transaction</code>
     * [.sendTransaction(tx, mode)](#module_client.OKChainClient+sendTransaction) ⇒ <code>Object</code>
     * [.getAccount(address)](#module_client.OKChainClient+getAccount) ⇒ <code>Object</code>
     * [.getBalance(address)](#module_client.OKChainClient+getBalance) ⇒ <code>Object</code>
@@ -61,6 +57,13 @@ The OKChain client.
     * [.getSequenceNumber(address)](#module_client.OKChainClient+getSequenceNumber) ⇒ <code>Number</code>
     * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
     * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
+    * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+    * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
+    * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
+    * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
+    * [.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber)](#module_client.OKChainClient+sendListTokenPairTransaction) ⇒ <code>Object</code>
+    * [.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKChainClient+sendAddProductDepositTransaction) ⇒ <code>Object</code>
+    * [.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKChainClient+sendWithdrawProductDepositTransaction) ⇒ <code>Object</code>
 
 <a name="new_module_client.OKChainClient_new"></a>
 
@@ -139,18 +142,19 @@ Send PlaceOrderTransaction.
 
 <a name="module_client.OKChainClient+buildTransaction"></a>
 
-#### okChainClient.buildTransaction(msg, signMsg, sequenceNumber, memo) ⇒ [<code>Transaction</code>](#Transaction)
+#### okChainClient.buildTransaction(msg, signMsg, memo, fee, sequenceNumber) ⇒ <code>Transaction</code>
 Build Transaction for sending to okchain.
 
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
-**Returns**: [<code>Transaction</code>](#Transaction) - Transaction object  
+**Returns**: <code>Transaction</code> - Transaction object  
 
 | Param | Type | Default |
 | --- | --- | --- |
 | msg | <code>Object</code> |  | 
 | signMsg | <code>Object</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
 | memo | <code>String</code> |  | 
+| fee | <code>String</code> | <code></code> | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
 
 <a name="module_client.OKChainClient+sendTransaction"></a>
 
@@ -236,6 +240,114 @@ get accountNumber from accountInfo Object
 | Param | Type |
 | --- | --- |
 | accountInfo | <code>String</code> | 
+
+<a name="module_client.OKChainClient+sendTokenIssueTransaction"></a>
+
+#### okChainClient.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber) ⇒ <code>Object</code>
+Send TokenIssueTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| symbol | <code>String</code> |  | 
+| whole_name | <code>String</code> |  | 
+| total_supply | <code>String</code> |  | 
+| mintable | <code>Boolean</code> | <code>false</code> | 
+| description | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendTokenBurnTransaction"></a>
+
+#### okChainClient.sendTokenBurnTransaction(token, amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send TokenBurnTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| token | <code>String</code> |  | 
+| amount | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendTokenMintTransaction"></a>
+
+#### okChainClient.sendTokenMintTransaction(token, amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send TokenMintTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| token | <code>String</code> |  | 
+| amount | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendRegisterDexOperatorTransaction"></a>
+
+#### okChainClient.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber) ⇒ <code>Object</code>
+Send RegisterDexOperatorTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| website | <code>String</code> |  | 
+| handling_fee_address | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendListTokenPairTransaction"></a>
+
+#### okChainClient.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber) ⇒ <code>Object</code>
+Send ListTokenPairTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| base_asset | <code>String</code> |  | 
+| quote_asset | <code>String</code> |  | 
+| init_price | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendAddProductDepositTransaction"></a>
+
+#### okChainClient.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber) ⇒ <code>Object</code>
+Send AddProductDepositTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| amount | <code>String</code> |  | 
+| product | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKChainClient+sendWithdrawProductDepositTransaction"></a>
+
+#### okChainClient.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber) ⇒ <code>Object</code>
+Send WithdrawProductDepositTransaction.
+
+**Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| amount | <code>String</code> |  | 
+| product | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
 
 <a name="module_crypto"></a>
 
@@ -485,54 +597,4 @@ SHA256.
 | Param | Type |
 | --- | --- |
 | hex | <code>string</code> | 
-
-<a name="HttpProxy"></a>
-
-## HttpProxy
-HttpProxy
-
-**Kind**: global class  
-<a name="Transaction"></a>
-
-## Transaction
-Transaction
-
-**Kind**: global class  
-
-* [Transaction](#Transaction)
-    * [new Transaction()](#new_Transaction_new)
-    * [.sign(privateKeyHex, msg)](#Transaction+sign) ⇒ [<code>Transaction</code>](#Transaction)
-    * [.serializeTransactionWithJson(mode)](#Transaction+serializeTransactionWithJson) ⇒ <code>Object</code>
-
-<a name="new_Transaction_new"></a>
-
-### new Transaction()
-
-| Param | Type |
-| --- | --- |
-| param.account_number | <code>String</code> | 
-| param.chain_id | <code>String</code> | 
-| param.fee | <code>Object</code> | 
-| param.memo | <code>String</code> | 
-| param.msg | <code>Object</code> | 
-| param.sequence | <code>String</code> | 
-
-<a name="Transaction+sign"></a>
-
-### transaction.sign(privateKeyHex, msg) ⇒ [<code>Transaction</code>](#Transaction)
-**Kind**: instance method of [<code>Transaction</code>](#Transaction)  
-
-| Param | Type |
-| --- | --- |
-| privateKeyHex | <code>string</code> | 
-| msg | <code>Object</code> | 
-
-<a name="Transaction+serializeTransactionWithJson"></a>
-
-### transaction.serializeTransactionWithJson(mode) ⇒ <code>Object</code>
-**Kind**: instance method of [<code>Transaction</code>](#Transaction)  
-
-| Param | Type |
-| --- | --- |
-| mode | <code>string</code> | 
 
