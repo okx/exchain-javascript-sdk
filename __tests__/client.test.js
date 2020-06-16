@@ -1,6 +1,5 @@
 import OKChainClient from "../src"
 import * as crypto from "../src/crypto"
-import { TokenClient } from "../src/tokenClient"
 
 
 
@@ -64,13 +63,6 @@ describe("OKChainClient test", async () => {
     console.log(JSON.stringify(res2))
     expect(res2.status).toBe(200)
 
-  })
-  it("requestToken", async () => {
-    const client = new TokenClient("http://kong-proxy.dev-okex.svc.cluster.local:8443",privateKey)
-    //const client = new TokenClient("http://kong-proxy.test-d-okex.svc.test.local:8443",privateKey)
-    const res = await client.requestToken(1000000000)
-    console.log(res)
-    console.log(res.result.data)
   })
 
    async function  prepareAccount() {
