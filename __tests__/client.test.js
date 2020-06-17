@@ -78,6 +78,29 @@ describe("OKChainClient test", async () => {
      }
   }
 
+  it("send sendTokenIssueTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendTokenIssueTransaction("aa", "aa11", "10000", true)
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+  it("send sendTokenBurnTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendTokenBurnTransaction("aa", "100", "burn")
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+  it("send sendTokenMintTransaction", async () => {
+    jest.setTimeout(10000)
+    const data = await prepareAccount()
+    const res = await data.okclient.sendTokenMintTransaction("aa", "200", "mint")
+    console.log(JSON.stringify(res))
+    expect(res.status).toBe(200)
+  })
+
+
   it("send sendRegisterDexOperatorTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
