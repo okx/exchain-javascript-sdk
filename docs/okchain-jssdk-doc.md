@@ -256,6 +256,7 @@ Send TokenIssueTransaction.
 | total_supply | <code>String</code>  `precision:8` | `true` | `"10000.00000000"` |
 | mintable | <code>Boolean</code> | `true` | <code>false</code> |
 | description | <code>String</code> | `true` |  |
+| memo | <code>String</code> | `false` |  |
 | sequenceNumber | <code>Number</code> | `false` |  |
 
 <a name="module_client.OKChainClient+sendTokenBurnTransaction"></a>

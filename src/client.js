@@ -308,6 +308,7 @@ export class OKChainClient {
      * @param {String} total_supply
      * @param {Boolean} mintable
      * @param {String} description
+     * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
