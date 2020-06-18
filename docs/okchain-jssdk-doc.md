@@ -71,7 +71,7 @@ The OKChain client.
 
 | Param | Type |
 | --- | --- |
-| url | <code>string</code> | 
+| url | <code>string</code> |
 
 <a name="module_client.OKChainClient+setMode"></a>
 
@@ -91,7 +91,7 @@ set the mode when send transaction
 
 | Param | Type |
 | --- | --- |
-| privateKey | <code>string</code> | 
+| privateKey | <code>string</code> |
 
 <a name="module_client.OKChainClient+sendSendTransaction"></a>
 
@@ -119,9 +119,9 @@ Send CancelOrderTransaction.
 
 | Param | Type | Default |
 | --- | --- | --- |
-| orderId | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| orderId | <code>String</code> |  |
+| memo | <code>String</code> |  |
+| sequenceNumber | <code>Number</code> | <code></code> |
 
 <a name="module_client.OKChainClient+sendPlaceOrderTransaction"></a>
 
@@ -133,12 +133,12 @@ Send PlaceOrderTransaction.
 
 | Param | Type | Default |
 | --- | --- | --- |
-| product | <code>String</code> |  | 
-| side | <code>String</code> |  | 
-| price | <code>Number</code> |  | 
-| quantity | <code>Number</code> |  | 
-| memo | <code>Number</code> |  | 
-| sequence | <code>Number</code> | <code></code> | 
+| product | <code>String</code> |  |
+| side | <code>String</code> |  |
+| price | <code>Number</code> |  |
+| quantity | <code>Number</code> |  |
+| memo | <code>Number</code> |  |
+| sequence | <code>Number</code> | <code></code> |
 
 <a name="module_client.OKChainClient+buildTransaction"></a>
 
@@ -150,11 +150,11 @@ Build Transaction for sending to okchain.
 
 | Param | Type | Default |
 | --- | --- | --- |
-| msg | <code>Object</code> |  | 
-| signMsg | <code>Object</code> |  | 
-| memo | <code>String</code> |  | 
-| fee | <code>String</code> | <code></code> | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| msg | <code>Object</code> |  |
+| signMsg | <code>Object</code> |  |
+| memo | <code>String</code> |  |
+| fee | <code>String</code> | <code></code> |
+| sequenceNumber | <code>Number</code> | <code></code> |
 
 <a name="module_client.OKChainClient+sendTransaction"></a>
 
@@ -179,7 +179,7 @@ get account
 
 | Param | Type |
 | --- | --- |
-| address | <code>String</code> | 
+| address | <code>String</code> |
 
 <a name="module_client.OKChainClient+getBalance"></a>
 
@@ -191,7 +191,7 @@ get balances from okchain
 
 | Param | Type |
 | --- | --- |
-| address | <code>String</code> | 
+| address | <code>String</code> |
 
 <a name="module_client.OKChainClient+getBalanceFromAccountInfo"></a>
 
@@ -215,7 +215,7 @@ get SequenceNumber from okchain
 
 | Param | Type |
 | --- | --- |
-| address | <code>String</code> | 
+| address | <code>String</code> |
 
 <a name="module_client.OKChainClient+getSequenceNumberFromAccountInfo"></a>
 
@@ -227,7 +227,7 @@ get SequenceNumber from accountInfo Object
 
 | Param | Type |
 | --- | --- |
-| accountInfo | <code>String</code> | 
+| accountInfo | <code>String</code> |
 
 <a name="module_client.OKChainClient+getAccountNumberFromAccountInfo"></a>
 
@@ -239,7 +239,7 @@ get accountNumber from accountInfo Object
 
 | Param | Type |
 | --- | --- |
-| accountInfo | <code>String</code> | 
+| accountInfo | <code>String</code> |
 
 <a name="module_client.OKChainClient+sendTokenIssueTransaction"></a>
 
@@ -249,14 +249,14 @@ Send TokenIssueTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| symbol | <code>String</code> |  | 
-| whole_name | <code>String</code> |  | 
-| total_supply | <code>String</code> |  | 
-| mintable | <code>Boolean</code> | <code>false</code> | 
-| description | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| symbol | <code>String</code> | `true` | `"xxb"` |
+| whole_name | <code>String</code> | `true` | `"xxb token"` |
+| total_supply | <code>String</code>  `precision:8` | `true` | `"10000.00000000"` |
+| mintable | <code>Boolean</code> | `true` | <code>false</code> |
+| description | <code>String</code> | `true` |  |
+| sequenceNumber | <code>Number</code> | `false` |  |
 
 <a name="module_client.OKChainClient+sendTokenBurnTransaction"></a>
 
@@ -266,12 +266,12 @@ Send TokenBurnTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| token | <code>String</code> |  | 
-| amount | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| token | <code>String</code> | `true` | `"xxb"` |
+| amount | <code>String</code>`precision:8` | `true` | `"100.00000000"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_client.OKChainClient+sendTokenMintTransaction"></a>
 
@@ -281,12 +281,12 @@ Send TokenMintTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| token | <code>String</code> |  | 
-| amount | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| token | <code>String</code> | `true` | `"xxb"` |
+| amount | <code>String</code>`precision:8` | `true` | `"100.00000000"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_client.OKChainClient+sendRegisterDexOperatorTransaction"></a>
 
@@ -296,12 +296,12 @@ Send RegisterDexOperatorTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| website | <code>String</code> |  | 
-| handling_fee_address | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| website | <code>String</code> | `true` | `"http://test.json"` |
+| handling_fee_address | <code>String</code> | `true` | `okchain address` eg.`"okchain17xpfvakm2amg962yls6f84z3kell8c5ljresa7"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_client.OKChainClient+sendListTokenPairTransaction"></a>
 
@@ -311,13 +311,13 @@ Send ListTokenPairTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| base_asset | <code>String</code> |  | 
-| quote_asset | <code>String</code> |  | 
-| init_price | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| base_asset | <code>String</code> | `true` | `"tbtc-edc"` |
+| quote_asset | <code>String</code> | `true` | `"tusdk-d42"` |
+| init_price | <code>String</code>`precision:8` | `true` | `"8000.01000000"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_client.OKChainClient+sendAddProductDepositTransaction"></a>
 
@@ -327,12 +327,12 @@ Send AddProductDepositTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| amount | <code>String</code> |  | 
-| product | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| amount | <code>String</code>`precision:8` | `true` | `default okt`  eg.`"50.00000000"` |
+| product | <code>String</code> | `true` | `"tbtc-edc_tusdk-d42"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_client.OKChainClient+sendWithdrawProductDepositTransaction"></a>
 
@@ -342,12 +342,12 @@ Send WithdrawProductDepositTransaction.
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
 **Returns**: <code>Object</code> - response  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| amount | <code>String</code> |  | 
-| product | <code>String</code> |  | 
-| memo | <code>String</code> |  | 
-| sequenceNumber | <code>Number</code> | <code></code> | 
+| Param | Type | Required | Example |
+| --- | --- | --- | --- |
+| amount | <code>String</code>`precision:8` | `true` | `default okt`  eg.`"40.00000000"` |
+| product | <code>String</code> | `true` | `"tbtc-edc_tusdk-d42"` |
+| memo | <code>String</code> | `false` |  |
+| sequenceNumber | <code>Number</code> | `false` | <code></code> |
 
 <a name="module_crypto"></a>
 
@@ -442,7 +442,7 @@ Encode pubKey to compressed pubKey buffer.
 
 | Param | Type |
 | --- | --- |
-| pubKey | <code>Elliptic.PublicKey</code> | 
+| pubKey | <code>Elliptic.PublicKey</code> |
 
 <a name="module_crypto.getPubKeyHexFromPrivateKey"></a>
 
@@ -466,7 +466,7 @@ Get public key from  private key.
 
 | Param | Type |
 | --- | --- |
-| privateKey | <code>Buffer</code> | 
+| privateKey | <code>Buffer</code> |
 
 <a name="module_crypto.getAddressFromPubKey"></a>
 
@@ -529,8 +529,8 @@ Generate KeyStore with privateKey and password.
 
 | Param | Type |
 | --- | --- |
-| privateKeyHex | <code>string</code> | 
-| password | <code>string</code> | 
+| privateKeyHex | <code>string</code> |
+| password | <code>string</code> |
 
 <a name="module_crypto.getPrivateKeyFromKeyStore"></a>
 
@@ -542,8 +542,8 @@ Get privateKey from keyStore.
 
 | Param | Type |
 | --- | --- |
-| keystore | <code>string</code> \| <code>object</code> | 
-| password | <code>string</code> | 
+| keystore | <code>string</code> \| <code>object</code> |
+| password | <code>string</code> |
 
 <a name="module_crypto.generateMnemonic"></a>
 
@@ -560,7 +560,7 @@ Validate mnemonic.
 
 | Param | Type |
 | --- | --- |
-| mnemonic. | <code>string</code> | 
+| mnemonic. | <code>string</code> |
 
 <a name="module_crypto.getPrivateKeyFromMnemonic"></a>
 
@@ -572,7 +572,7 @@ Get private key from mnemonic.
 
 | Param | Type |
 | --- | --- |
-| mnemonic | <code>string</code> | 
+| mnemonic | <code>string</code> |
 
 <a name="module_crypto.sha256Ripemd160"></a>
 
@@ -584,7 +584,7 @@ Just like ripemd160(sha256(hex))
 
 | Param | Type |
 | --- | --- |
-| hex | <code>string</code> | 
+| hex | <code>string</code> |
 
 <a name="module_crypto.sha256"></a>
 
@@ -596,5 +596,5 @@ SHA256.
 
 | Param | Type |
 | --- | --- |
-| hex | <code>string</code> | 
+| hex | <code>string</code> |
 
