@@ -27,7 +27,7 @@
         * [.getSequenceNumber(address)](#module_client.OKChainClient+getSequenceNumber) ⇒ <code>Number</code>
         * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
         * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
-        * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+        * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, memo, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
         * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
         * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
         * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
@@ -57,7 +57,7 @@ The OKChain client.
     * [.getSequenceNumber(address)](#module_client.OKChainClient+getSequenceNumber) ⇒ <code>Number</code>
     * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
     * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
-    * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+    * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, memo, description, sequenceNumber)](#module_client.OKChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
     * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
     * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
     * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
