@@ -243,7 +243,7 @@ get accountNumber from accountInfo Object
 
 <a name="module_client.OKChainClient+sendTokenIssueTransaction"></a>
 
-#### okChainClient.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, sequenceNumber) ⇒ <code>Object</code>
+#### okChainClient.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, memo, sequenceNumber) ⇒ <code>Object</code>
 Send TokenIssueTransaction.
 
 **Kind**: instance method of [<code>OKChainClient</code>](#module_client.OKChainClient)  
