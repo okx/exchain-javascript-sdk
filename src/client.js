@@ -311,7 +311,7 @@ export class OKChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', sequenceNumber = null) {
+    async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', memo= '', sequenceNumber = null) {
 
         const msg = [{
             type: "okchain/token/MsgIssue",
