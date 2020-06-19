@@ -10,7 +10,7 @@ The OKChain JavaScript SDK allows browsers and node.js clients to interact with 
 
 Install the NPM package:
 ```bash
-$ npm i ok-javascript-sdk
+$ npm i @okchain/javascript-sdk
 ```
 
 # API
