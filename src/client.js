@@ -398,9 +398,9 @@ export class OKChainClient {
         const msg = [{
             type: "okchain/dex/CreateOperator",
             value: {
-                handling_fee_address: handling_fee_address,
-                owner: this.address,
-                website: website,
+                HandlingFeeAddress: handling_fee_address,
+                Owner: this.address,
+                Website: website,
             },
         }]
 
