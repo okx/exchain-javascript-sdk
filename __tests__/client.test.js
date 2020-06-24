@@ -7,7 +7,7 @@ const mnemonic = "total lottery arena when pudding best candy until army spoil d
 const privateKey = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
 const serverUrl = "http://localhost:26659"
 const userAddress = "okchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptdqket5k"
-const baseCoin = "tokt"
+const baseCoin = "okt"
 const testCoin = "xxb-127"
 const testProduct = testCoin + "_" + baseCoin
 
