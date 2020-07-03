@@ -15,7 +15,7 @@ $ npm i @okchain/javascript-sdk
 
 # API
 
-For up-to-date API documentation, please check the [wiki](https://github.com/okex/javascript-sdk/wiki).
+For up-to-date API documentation, please check the [wiki](https://github.com/okex/okchain-javascript-sdk/blob/master/docs/okchain-jssdk-doc.md).
 
 # Testing
 
