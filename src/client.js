@@ -89,7 +89,7 @@ export class OKChainClient {
     async sendSendTransaction(to, amount, denom, memo = "", sequenceNumber = null) {
 
         const coin = {
-            amount: amount,
+            amount: this.formatNumber(amount),
             denom: denom,
 
         }
@@ -142,6 +142,24 @@ export class OKChainClient {
         return res
     }
 
+    /*
+     * format number
+     */
+    formatNumber(num) {
+        const str = String(num);
+        let retStr = '';
+        if (str.indexOf('.') >= 0) {
+            let appendix = '';
+            const len = 8 - str.split('.')[1].length;
+            for (let i = 0; i < len; i++) {
+                appendix += '0';
+            }
+            retStr = str + appendix;
+        } else {
+            retStr += `${str}.00000000`;
+        }
+        return retStr;
+    };
 
     /**
      * Send PlaceOrderTransaction.
@@ -155,9 +173,9 @@ export class OKChainClient {
      */
     async sendPlaceOrderTransaction(product, side, price, quantity, memo = "", sequence = null) {
         var order_items = [{
-            price: price,
+            price: this.formatNumber(price),
             product: product,
-            quantity: quantity,
+            quantity: this.formatNumber(quantity),
             side: side,
         }]
         return this.sendPlaceOrdersTransaction(order_items, memo, sequence)
@@ -346,7 +364,7 @@ export class OKChainClient {
             type: "okchain/token/MsgBurn",
             value: {
                 amount: {
-                    amount: amount,
+                    amount: this.formatNumber(amount),
                     denom: token
                 },
                 owner: this.address
@@ -372,7 +390,7 @@ export class OKChainClient {
             type: "okchain/token/MsgMint",
             value: {
                 amount: {
-                    amount: amount,
+                    amount: this.formatNumber(amount),
                     denom: token
                 },
                 owner: this.address
@@ -424,7 +442,7 @@ export class OKChainClient {
         const msg = [{
             type: "okchain/dex/MsgList",
             value: {
-                init_price: init_price,
+                init_price: this.formatNumber(init_price),
                 list_asset: base_asset,
                 owner: this.address,
                 quote_asset: quote_asset,
@@ -448,7 +466,7 @@ export class OKChainClient {
     async sendAddProductDepositTransaction(amount, product, memo = "", sequenceNumber = null) {
 
         const coin = {
-            amount: amount,
+            amount: this.formatNumber(amount),
             denom: nativeDenom,
         }
 
@@ -479,7 +497,7 @@ export class OKChainClient {
     async sendWithdrawProductDepositTransaction(amount, product, memo = "", sequenceNumber = null) {
 
         const coin = {
-            amount: amount,
+            amount: this.formatNumber(amount),
             denom: nativeDenom,
         }
 
