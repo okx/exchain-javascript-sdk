@@ -15,7 +15,7 @@ const apiPath = {
     queryAccount: "/okchain/v1/auth/accounts",
 }
 
-const chainId = "okchain"
+const chainId = "okchain-testnet1"
 const bech32Head = "okchain"
 const mode = "block"
 const nativeDenom = "okt"
