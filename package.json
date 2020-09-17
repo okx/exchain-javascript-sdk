@@ -1,12 +1,12 @@
 {
-  "name": "@okchain/javascript-sdk",
+  "name": "@okexchain/javascript-sdk",
   "version": "0.0.4",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "build": "rm -rf lib && npx babel src -d lib",
-    "build:docs": "npx jsdoc-to-markdown -f src/**/*.js > docs/okchain-jssdk-doc.md",
+    "build:docs": "npx jsdoc-to-markdown -f src/**/*.js > docs/okexchain-jssdk-doc.md",
     "prepublishOnly": "npm run build",
     "lint": "eslint --fix src __tests__"
   },

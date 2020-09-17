@@ -1,21 +1,21 @@
-# OKChain JavaScript SDK
+# OKEXChain JavaScript SDK
 
-The OKChain JavaScript SDK allows browsers and node.js clients to interact with OKChain. It includes the following core components:
+The OKEXChain JavaScript SDK allows browsers and node.js clients to interact with OKEXChain. It includes the following core components:
 
 * **crypto** - core cryptographic functions.
-* **client** - implementations of OKChain transaction types, such as for transfers and trading.
+* **client** - implementations of OKEXChain transaction types, such as for transfers and trading.
 * **accounts** - management of "accounts" and wallets, including seed and encrypted mnemonic generation.
 
 # Installation
 
 Install the NPM package:
 ```bash
-$ npm i @okchain/javascript-sdk
+$ npm i @okexchain/javascript-sdk
 ```
 
 # API
 
-For up-to-date API documentation, please check the [wiki](https://github.com/okex/okchain-javascript-sdk/blob/master/docs/okchain-jssdk-doc.md).
+For up-to-date API documentation, please check the [wiki](https://github.com/okex/okexchain-javascript-sdk/blob/master/docs/okexchain-jssdk-doc.md).
 
 # Testing
 
@@ -27,4 +27,4 @@ $ npm run test
 
 # Contributing
 
-Contributions to the OKChain JavaScript SDK are welcome. Please ensure that you have tested the changes with a local client and have added unit test coverage for your code.
+Contributions to the OKEXChain JavaScript SDK are welcome. Please ensure that you have tested the changes with a local client and have added unit test coverage for your code.
