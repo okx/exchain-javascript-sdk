@@ -11,14 +11,14 @@ import HttpProxy from "./httpProxy"
 
 const apiPath = {
     //rest server
-    txs: "/okchain/v1/txs",
-    queryAccount: "/okchain/v1/auth/accounts",
+    txs: "/okexchain/v1/txs",
+    queryAccount: "/okexchain/v1/auth/accounts",
 }
 
-const chainId = "okchain-testnet1"
-const bech32Head = "okchain"
+const chainId = "okexchain-testnet1"
+const bech32Head = "okexchain"
 const mode = "block"
-const nativeDenom = "okt"
+const nativeDenom = "tokt"
 var defaultFee = {
     amount: [{
         amount: "0.02000000",
@@ -30,15 +30,15 @@ var defaultFee = {
 
 
 export const GetClient = async (privateKey, url) => {
-    const client = new OKChainClient(url)
+    const client = new OKEXChainClient(url)
     client.setAccountInfo(privateKey)
     return client
 }
 
 /**
- * The OKChain client.
+ * The OKEXChain client.
  */
-export class OKChainClient {
+export class OKEXChainClient {
     /**
      * @param {string} url
      */
@@ -60,7 +60,7 @@ export class OKChainClient {
 
     /**
      * @param {string} privateKey
-     * @return {OKChainClient}
+     * @return {OKEXChainClient}
      */
     async setAccountInfo(privateKey) {
         if (privateKey !== this.privateKey) {
@@ -95,7 +95,7 @@ export class OKChainClient {
         }
 
         const msg = [{
-            type: "okchain/token/MsgTransfer",
+            type: "okexchain/token/MsgTransfer",
             value: {
                 amount: [coin],
                 from_address: this.address,
@@ -129,7 +129,7 @@ export class OKChainClient {
         var signMsg = []
 
         msg.push({
-            type: "okchain/order/MsgCancel",
+            type: "okexchain/order/MsgCancel",
             value: {
                 order_ids: orderIdList,
                 sender: this.address,
@@ -183,7 +183,7 @@ export class OKChainClient {
 
     async sendPlaceOrdersTransaction(order_items, memo = "", sequence = null) {
         const placeOrderMsg = [{
-            type: "okchain/order/MsgNew",
+            type: "okexchain/order/MsgNew",
             value: {
                 order_items: order_items,
                 sender: this.address,
@@ -199,7 +199,7 @@ export class OKChainClient {
     }
 
     /**
-     * Build Transaction for sending to okchain.
+     * Build Transaction for sending to okexchain.
      * @param {Object} msg
      * @param {Object} signMsg
      * @param {String} memo
@@ -228,7 +228,7 @@ export class OKChainClient {
     }
 
     /**
-     * send transaction to OKChain.
+     * send transaction to OKEXChain.
      * @param {signedTx} tx signed Transaction object
      * @param {Boolean} mode use synchronous mode, optional
      * @return {Object} response (success or fail)
@@ -264,7 +264,7 @@ export class OKChainClient {
     }
 
     /**
-     * get balances from okchain
+     * get balances from OKEXChain
      * @param {String} address
      * @return {Object} result
      */
@@ -287,7 +287,7 @@ export class OKChainClient {
     }
 
     /**
-     * get SequenceNumber from okchain
+     * get SequenceNumber from OKEXChain
      * @param {String} address
      * @return {Number} sequenceNumber
      */
@@ -333,7 +333,7 @@ export class OKChainClient {
     async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', memo= '', sequenceNumber = null) {
 
         const msg = [{
-            type: "okchain/token/MsgIssue",
+            type: "okexchain/token/MsgIssue",
             value: {
                 description: description,
                 mintable: mintable,
@@ -361,7 +361,7 @@ export class OKChainClient {
     async sendTokenBurnTransaction(token, amount, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okchain/token/MsgBurn",
+            type: "okexchain/token/MsgBurn",
             value: {
                 amount: {
                     amount: this.formatNumber(amount),
@@ -387,7 +387,7 @@ export class OKChainClient {
     async sendTokenMintTransaction(token, amount, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okchain/token/MsgMint",
+            type: "okexchain/token/MsgMint",
             value: {
                 amount: {
                     amount: this.formatNumber(amount),
@@ -414,7 +414,7 @@ export class OKChainClient {
     async sendRegisterDexOperatorTransaction(website, handling_fee_address, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okchain/dex/CreateOperator",
+            type: "okexchain/dex/CreateOperator",
             value: {
                 handling_fee_address: handling_fee_address,
                 owner: this.address,
@@ -440,7 +440,7 @@ export class OKChainClient {
     async sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okchain/dex/MsgList",
+            type: "okexchain/dex/MsgList",
             value: {
                 init_price: this.formatNumber(init_price),
                 list_asset: base_asset,
@@ -471,7 +471,7 @@ export class OKChainClient {
         }
 
         const msg = [{
-            type: "okchain/dex/MsgDeposit",
+            type: "okexchain/dex/MsgDeposit",
             value: {
                 amount: coin,
                 depositor: this.address,
@@ -502,7 +502,7 @@ export class OKChainClient {
         }
 
         const msg = [{
-            type: "okchain/dex/MsgWithdraw",
+            type: "okexchain/dex/MsgWithdraw",
             value: {
                 amount: coin,
                 depositor: this.address,
