@@ -516,4 +516,145 @@ export class OKEXChainClient {
         return res
     }
 
+    /**
+     * Send AddLiquidityTransaction.
+     * @param {Number} min_liquidity
+     * @param {Number} max_base_amount
+     * @param {String} base_token
+     * @param {Number} quote_amount
+     * @param {String} quote_token
+     * @param {Number} deadline
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo= '', sequenceNumber = null) {
+
+        const base_coin = {
+            amount: this.formatNumber(max_base_amount),
+            denom: base_token,
+        }
+        const quote_coin = {
+            amount: this.formatNumber(max_base_amount),
+            denom: quote_token,
+        }
+
+        const msg = [{
+            type: "okexchain/ammswap/MsgAddLiquidity",
+            value: {
+                deadline: deadline,
+                min_liquidity: min_liquidity,
+                max_base_amount: base_coin,
+                owner: this.address,
+                quote_amount: quote_coin,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send RemoveLiquidityTransaction.
+     * @param {Number} liquidity
+     * @param {Number} min_base_amount
+     * @param {String} base_token
+     * @param {Number} min_quote_amount
+     * @param {String} quote_token
+     * @param {Number} deadline
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo= '', sequenceNumber = null) {
+
+        const base_coin = {
+            amount: this.formatNumber(min_base_amount),
+            denom: base_token,
+        }
+        const quote_coin = {
+            amount: this.formatNumber(min_quote_amount),
+            denom: quote_token,
+        }
+
+        const msg = [{
+            type: "okexchain/ammswap/MsgRemoveLiquidity",
+            value: {
+                deadline: deadline,
+                liquidity: liquidity,
+                min_base_amount: base_coin,
+                min_quote_amount: quote_coin,
+                owner: this.address,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send CreateExchangeTransaction.
+     * @param {String} Token0Name
+     * @param {String} Token1Name
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendCreateExchangeTransaction(Token0Name, Token1Name, memo= '', sequenceNumber = null) {
+
+        const msg = [{
+            type: "okexchain/ammswap/MsgCreateExchange",
+            value: {
+                owner: this.address,
+                Token0Name: Token0Name,
+                Token1Name: Token1Name,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send SwapTokenTransaction.
+     * @param {Number} sold_token_amount
+     * @param {String} sold_token
+     * @param {Number} min_bought_token_amount
+     * @param {String} bought_token
+     * @param {Number} deadline
+     * @param {String} recipient
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo= '', sequenceNumber = null) {
+
+        const sold_coin = {
+            amount: this.formatNumber(sold_token_amount),
+            denom: sold_token,
+        }
+        const bought_coin = {
+            amount: this.formatNumber(min_bought_token_amount),
+            denom: bought_token,
+        }
+
+        const msg = [{
+            type: "okexchain/ammswap/MsgSwapToken",
+            value: {
+                deadline: deadline,
+                min_bought_token_amount: bought_coin,
+                owner: this.address,
+                recipient: recipient,
+                sold_token_amount: sold_coin,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
 }
