@@ -18,7 +18,7 @@ const apiPath = {
 const chainId = "okexchain-testnet1"
 const bech32Head = "okexchain"
 const mode = "block"
-const nativeDenom = "tokt"
+const nativeDenom = "okt" // t
 var defaultFee = {
     amount: [{
         amount: "0.02000000",
@@ -545,8 +545,8 @@ export class OKEXChainClient {
                 deadline: deadline,
                 min_liquidity: min_liquidity,
                 max_base_amount: base_coin,
-                owner: this.address,
                 quote_amount: quote_coin,
+                sender: this.address,
             }
         }]
 
@@ -585,7 +585,7 @@ export class OKEXChainClient {
                 liquidity: liquidity,
                 min_base_amount: base_coin,
                 min_quote_amount: quote_coin,
-                owner: this.address,
+                sender: this.address,
             }
         }]
 
@@ -607,9 +607,9 @@ export class OKEXChainClient {
         const msg = [{
             type: "okexchain/ammswap/MsgCreateExchange",
             value: {
-                owner: this.address,
-                Token0Name: Token0Name,
-                Token1Name: Token1Name,
+                sender: this.address,
+                token0_name: Token0Name,
+                token1_name: Token1Name,
             }
         }]
 
@@ -646,8 +646,8 @@ export class OKEXChainClient {
             value: {
                 deadline: deadline,
                 min_bought_token_amount: bought_coin,
-                owner: this.address,
                 recipient: recipient,
+                sender: this.address,
                 sold_token_amount: sold_coin,
             }
         }]
