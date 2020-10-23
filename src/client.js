@@ -15,7 +15,7 @@ const apiPath = {
     queryAccount: "/okexchain/v1/auth/accounts",
 }
 
-const chainId = "okexchain-testnet1"
+const chainId = "okexchain-testnet1" //"test-chain-2yOdpj"
 const bech32Head = "okexchain"
 const mode = "block"
 const nativeDenom = "okt" // t
@@ -523,7 +523,7 @@ export class OKEXChainClient {
      * @param {String} base_token
      * @param {Number} quote_amount
      * @param {String} quote_token
-     * @param {Number} deadline
+     * @param {String} deadline
      * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
@@ -543,8 +543,8 @@ export class OKEXChainClient {
             type: "okexchain/ammswap/MsgAddLiquidity",
             value: {
                 deadline: deadline,
-                min_liquidity: min_liquidity,
                 max_base_amount: base_coin,
+                min_liquidity: min_liquidity,
                 quote_amount: quote_coin,
                 sender: this.address,
             }
@@ -562,7 +562,7 @@ export class OKEXChainClient {
      * @param {String} base_token
      * @param {Number} min_quote_amount
      * @param {String} quote_token
-     * @param {Number} deadline
+     * @param {String} deadline
      * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
@@ -624,7 +624,7 @@ export class OKEXChainClient {
      * @param {String} sold_token
      * @param {Number} min_bought_token_amount
      * @param {String} bought_token
-     * @param {Number} deadline
+     * @param {String} deadline
      * @param {String} recipient
      * @param {String} memo
      * @param {Number} sequenceNumber
