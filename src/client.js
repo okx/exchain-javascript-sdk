@@ -146,9 +146,12 @@ export class OKEXChainClient {
      * format number
      */
     formatNumber(num) {
-        const str = String(num);
+        let str = String(num);
         let retStr = '';
         if (str.indexOf('.') >= 0) {
+            if (str.split('.')[1].length > 8) {
+                str = str.split('.')[0] + '.' + str.split('.')[1].substr(0, 8)
+            }
             let appendix = '';
             const len = 8 - str.split('.')[1].length;
             for (let i = 0; i < len; i++) {
