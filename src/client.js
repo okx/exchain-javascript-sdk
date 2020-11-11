@@ -27,6 +27,7 @@ var defaultFee = {
     }],
     gas: "200000",
 }
+const precision = 8
 
 
 export const GetClient = async (privateKey, url) => {
@@ -149,11 +150,11 @@ export class OKEXChainClient {
         let str = String(num);
         let retStr = '';
         if (str.indexOf('.') >= 0) {
-            if (str.split('.')[1].length > 8) {
-                str = str.split('.')[0] + '.' + str.split('.')[1].substr(0, 8)
+            if (str.split('.')[1].length > precision) {
+                str = str.split('.')[0] + '.' + str.split('.')[1].substr(0, precision)
             }
             let appendix = '';
-            const len = 8 - str.split('.')[1].length;
+            const len = precision - str.split('.')[1].length;
             for (let i = 0; i < len; i++) {
                 appendix += '0';
             }
@@ -538,7 +539,7 @@ export class OKEXChainClient {
             denom: base_token,
         }
         const quote_coin = {
-            amount: this.formatNumber(max_base_amount),
+            amount: this.formatNumber(quote_amount),
             denom: quote_token,
         }
 
