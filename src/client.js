@@ -15,7 +15,7 @@ const apiPath = {
     queryAccount: "/okexchain/v1/auth/accounts",
 }
 
-const chainId = "okexchain-testnet1" //"test-chain-2yOdpj"
+const defaultChainId = "okexchain-testnet1" //"test-chain-2yOdpj"
 const bech32Head = "okexchain"
 const mode = "block"
 const nativeDenom = "okt" // t
@@ -42,13 +42,15 @@ export const GetClient = async (privateKey, url) => {
 export class OKEXChainClient {
     /**
      * @param {string} url
+     * @param {string} chainId
      */
-    constructor(url) {
+    constructor(url, chainId) {
         if (!url) {
             throw new Error("null url")
         }
         this.httpClient = new HttpProxy(url)
         this.mode = mode
+        this.chainId = chainId || defaultChainId
     }
 
     /**
@@ -57,6 +59,14 @@ export class OKEXChainClient {
      */
     async setMode(m) {
         this.mode = m
+    }
+
+    /**
+     * set the chainId when send transaction
+     * @param {string} id
+     */
+    async setChainId(id) {
+        this.chainId = id
     }
 
     /**
@@ -220,7 +230,7 @@ export class OKEXChainClient {
 
         const params = {
             account_number: parseInt(this.account_number),
-            chain_id: chainId,
+            chain_id: this.chainId,
             memo: memo,
             msg,
             sequence: sequenceNumber,

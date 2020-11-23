@@ -15,7 +15,27 @@ class HttpProxy {
     return this.httpClient
       .request(paramsObj)
       .then(response => {
-        return { result: response.data, status: response.status }
+        if (method === 'get')  {
+          return { result: response.data, status: response.status }
+        }
+        let fmtResponse = {
+          code: 0,
+          data: null,
+          msg: 'success',
+          detail_msg: ''
+        }
+        const data = response.data || null;
+        let raw_log = (data && data.raw_log) || '';
+        if (raw_log) {
+          raw_log = JSON.parse(raw_log)
+          if (raw_log.length && raw_log[0].success && (raw_log[0].success === true)) {
+            return { result: fmtResponse, status: response.status }
+          }
+          fmtResponse.code = raw_log.code
+          fmtResponse.msg = raw_log.message
+          fmtResponse.detail_msg = fmtResponse.msg
+        }
+        return { result: fmtResponse, status: response.status }
       }).catch(err => {
         console.error("HttpProxy", err.response && err.response.data)
       })
