@@ -15,7 +15,7 @@ import hexEncoding from "crypto-js/enc-hex"
 import SHA256 from "crypto-js/sha256"
 import RIPEMD160 from "crypto-js/ripemd160"
 import { Buffer } from "buffer"
-import {publicKeyConvert} from "secp256k1"
+import { publicKeyConvert } from "secp256k1"
 import createKeccakHash from "keccak"
 
 // 浏览器端实现
@@ -131,12 +131,9 @@ export const getPubKeyFromPrivateKey = privateKey => {
  */
 export const getAddressFromPubKey = (publicKey, prefix) => {
     publicKey = publicKey.slice(0, 2) === '0x' ? publicKey.slice(2) : publicKey
-    var publicKey1 = Buffer.from(publicKey, 'hex')
-
-
+    const publicKey1 = Buffer.from(publicKey, 'hex')
     publicKey = Buffer.from(publicKeyConvert(new Uint8Array(publicKey1), false)).slice(1)
     const hash = createKeccakHash('keccak256').update(publicKey).digest()
-    console.log(hash.slice(-20).toString('hex'))
     return encodeAddressToBech32(hash.slice(-20).toString('hex'), prefix)
 }
 
