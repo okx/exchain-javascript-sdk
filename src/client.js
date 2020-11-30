@@ -15,7 +15,7 @@ const apiPath = {
     queryAccount: "/okexchain/v1/auth/accounts",
 }
 
-const defaultChainId = "okexchain-testnet1" //"test-chain-2yOdpj"
+const defaultChainId = "okexchaintestnet-1" //"test-chain-2yOdpj"
 const bech32Head = "okexchain"
 const mode = "block"
 const nativeDenom = "tokt" // t
