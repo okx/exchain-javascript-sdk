@@ -18,7 +18,7 @@ const apiPath = {
 const defaultChainId = "okexchain-testnet1" //"test-chain-2yOdpj"
 const bech32Head = "okexchain"
 const mode = "block"
-const nativeDenom = "okt" // t
+const nativeDenom = "tokt" // t
 var defaultFee = {
     amount: [{
         amount: "0.02000000",
@@ -27,7 +27,7 @@ var defaultFee = {
     }],
     gas: "200000",
 }
-const precision = 8
+const precision = 18
 
 
 export const GetClient = async (privateKey, url) => {
@@ -161,16 +161,19 @@ export class OKEXChainClient {
         let retStr = '';
         if (str.indexOf('.') >= 0) {
             if (str.split('.')[1].length > precision) {
-                str = str.split('.')[0] + '.' + str.split('.')[1].substr(0, precision)
+                retStr = str.split('.')[0] + '.' + str.split('.')[1].substr(0, precision)
+            } else if (str.split('.')[1].length == precision) {
+                retStr = str
+            } else {
+                let appendix = '';
+                const len = precision - str.split('.')[1].length;
+                for (let i = 0; i < len; i++) {
+                    appendix += '0';
+                }
+                retStr = str + appendix;
             }
-            let appendix = '';
-            const len = precision - str.split('.')[1].length;
-            for (let i = 0; i < len; i++) {
-                appendix += '0';
-            }
-            retStr = str + appendix;
         } else {
-            retStr += `${str}.00000000`;
+            retStr += `${str}.000000000000000000`;
         }
         return retStr;
     };
