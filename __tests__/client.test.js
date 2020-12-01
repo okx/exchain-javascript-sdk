@@ -27,7 +27,8 @@ describe("OKEXChainClient test", async () => {
   it("send sendTransaction", async () => {
     jest.setTimeout(10000)
     const client = new OKEXChainClient(serverUrl)
-    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+
     await client.setAccountInfo(privateKey)
     //console.log(client)
     const addr = crypto.getAddressFromPrivateKey(client.privateKey)

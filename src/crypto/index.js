@@ -23,7 +23,7 @@ const sync = require('./scrypt-sync')
 
 
 const MNEMONIC_ENTROPY_LEN = 128
-const HD_PATH = "44'/996'/0'/0/0"
+const HD_PATH = "m/44'/996'/0'/0/0"
 
 
 /**
@@ -154,9 +154,12 @@ export const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
  * @return {Buffer} Signature.
  */
 export const sign = (msgHex, privateKey) => {
-  const msgHash = sha256(msgHex)
-  const msgHashHex = Buffer.from(msgHash, "hex")
-  const signature = ecc.sign(msgHashHex, Buffer.from(privateKey, "hex")) // enc ignored if buffer
+  const publicKey = Buffer.from(msgHex, "hex")
+  const msgHashHex = createKeccakHash('keccak256').update(publicKey)
+  console.log(msgHashHex)
+  const msgHash = Buffer.from(msgHashHex, "hex")
+  console.log(msgHash)
+  const signature = ecc.sign(msgHash, Buffer.from(privateKey, "hex")) // enc ignored if buffer
   return signature
 }
 
