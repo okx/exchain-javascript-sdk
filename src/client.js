@@ -16,12 +16,13 @@ const apiPath = {
 }
 
 const defaultChainId = "okexchaintestnet-1" //"test-chain-2yOdpj"
+
 const bech32Head = "okexchain"
 const mode = "block"
 const nativeDenom = "tokt" // t
 var defaultFee = {
     amount: [{
-        amount: "0.02000000",
+        amount: "0.020000000000000000",
         denom: nativeDenom,
 
     }],
