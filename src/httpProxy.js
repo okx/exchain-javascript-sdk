@@ -28,7 +28,8 @@ class HttpProxy {
         let raw_log = (data && data.raw_log) || '';
         if (raw_log) {
           raw_log = JSON.parse(raw_log)
-          if (raw_log.length && raw_log[0].success && (raw_log[0].success === true)) {
+          if (raw_log.length && raw_log[0]) {
+              fmtResponse.data = raw_log
             return { result: fmtResponse, status: response.status }
           }
           fmtResponse.code = raw_log.code
