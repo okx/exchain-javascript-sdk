@@ -29,7 +29,7 @@ class HttpProxy {
         if (raw_log) {
           raw_log = JSON.parse(raw_log)
           if (raw_log.length && raw_log[0]) {
-              fmtResponse.data = raw_log
+              fmtResponse.msg = raw_log
             return { result: fmtResponse, status: response.status }
           }
           fmtResponse.code = raw_log.code
