@@ -25,15 +25,9 @@ class HttpProxy {
           detail_msg: ''
         }
         const data = response.data || null;
-        let raw_log = (data && data.raw_log) || '';
-        if (raw_log) {
-          raw_log = JSON.parse(raw_log)
-          if (raw_log.length && raw_log[0]) {
-              fmtResponse.msg = raw_log
-            return { result: fmtResponse, status: response.status }
-          }
-          fmtResponse.code = raw_log.code
-          fmtResponse.msg = raw_log.message
+        if (data.code) {
+          fmtResponse.code = data.code
+          fmtResponse.msg = data.raw_log || ''
           fmtResponse.detail_msg = fmtResponse.msg
         }
         return { result: fmtResponse, status: response.status }
