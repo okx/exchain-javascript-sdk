@@ -562,7 +562,7 @@ export class OKEXChainClient {
             value: {
                 deadline: deadline,
                 max_base_amount: base_coin,
-                min_liquidity: min_liquidity,
+                min_liquidity: this.formatNumber(min_liquidity),
                 quote_amount: quote_coin,
                 sender: this.address,
             }
@@ -570,6 +570,7 @@ export class OKEXChainClient {
 
         const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
         const res = await this.sendTransaction(signedTx)
+        console.log(msg, res);
         return res
     }
 
@@ -600,7 +601,7 @@ export class OKEXChainClient {
             type: "okexchain/ammswap/MsgRemoveLiquidity",
             value: {
                 deadline: deadline,
-                liquidity: liquidity,
+                liquidity: this.formatNumber(liquidity),
                 min_base_amount: base_coin,
                 min_quote_amount: quote_coin,
                 sender: this.address,
