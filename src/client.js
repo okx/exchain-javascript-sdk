@@ -570,7 +570,6 @@ export class OKEXChainClient {
 
         const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
         const res = await this.sendTransaction(signedTx)
-        console.log(msg, res);
         return res
     }
 
