@@ -45,7 +45,7 @@ class Transaction {
     const pubKey = crypto.encodePubKeyToCompressedBuffer(crypto.getPubKeyFromPrivateKey(privateKey))
     this.signatures = [{
       pub_key: {
-        type:"tendermint/PubKeySecp256k1",
+        type:"ethermint/PubKeyEthSecp256k1",
         value:pubKey},
       signature: signature,
     }]
