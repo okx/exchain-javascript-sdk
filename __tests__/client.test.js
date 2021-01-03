@@ -137,14 +137,14 @@ describe("OKEXChainClient test", async () => {
   it("send AddLiquidityTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendAddLiquidityTransaction("0.01001000", "100.00000000", "eth", "200.00000000", 'okt', 1602781334, 'AddLiquidityTransaction', data.sequence)
+    const res = await data.okclient.sendAddLiquidityTransaction("0.01001000", "100.00000000", "eth", "200.00000000", 'okt', "1619677667", 'AddLiquidityTransaction', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
   it("send RemoveLiquidityTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendRemoveLiquidityTransaction("0.01001000", "50.00000000", "eth", "100.00000000", 'okt', 1602781334, 'RemoveLiquidityTransaction', data.sequence)
+    const res = await data.okclient.sendRemoveLiquidityTransaction("0.01001000", "50.00000000", "eth", "100.00000000", 'okt', "1619677667", 'RemoveLiquidityTransaction', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
