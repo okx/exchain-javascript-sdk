@@ -153,8 +153,8 @@ export const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
  * @return {Buffer} Signature.
  */
 export const sign = (msgHex, privateKey) => {
-  const publicKey = Buffer.from(msgHex, "hex")
-  const msgHashHex = createKeccakHash('keccak256').update(publicKey).digest()
+  const msg = Buffer.from(msgHex, "hex")
+  const msgHashHex = createKeccakHash('keccak256').update(msg).digest()
   const msgHash = Buffer.from(msgHashHex, "hex")
   const signature = ecc.sign(msgHash, Buffer.from(privateKey, "hex")) // enc ignored if buffer
   return signature
@@ -170,9 +170,10 @@ export const sign = (msgHex, privateKey) => {
 export const validateSig = (sigHex, msgHex, pubKeyHex) => {
   const publicKey = Buffer.from(pubKeyHex, "hex")
   if (!ecc.isPoint(publicKey)) throw new Error("invalid pubKey")
-  const msgHash = sha256(msgHex)
-  const msgHashHex = Buffer.from(msgHash, "hex")
-  return ecc.verify(msgHashHex, publicKey, Buffer.from(sigHex, "hex"))
+  const msg = Buffer.from(msgHex, "hex")
+  const msgHashHex = createKeccakHash('keccak256').update(msg).digest()
+  const msgHash = Buffer.from(msgHashHex, "hex")
+  return ecc.verify(msgHash, publicKey, Buffer.from(sigHex, "hex"))
 }
 
 /**
