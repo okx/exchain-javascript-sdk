@@ -19,14 +19,14 @@ const defaultChainId = "okexchaintestnet-1" //"test-chain-2yOdpj"
 
 const bech32Head = "okexchain"
 const mode = "block"
-const nativeDenom = "tokt" // t
+const nativeDenom = "okt" // t
 var defaultFee = {
     amount: [{
         amount: "0.020000000000000000",
         denom: nativeDenom,
 
     }],
-    gas: "200000",
+    gas: "500000",
 }
 const precision = 18
 
@@ -162,7 +162,7 @@ export class OKEXChainClient {
         let retStr = '';
         if (str.indexOf('.') >= 0) {
             if (str.split('.')[1].length > precision) {
-                retStr = str.split('.')[0] + '.' + str.split('.')[1].substr(0, precision)
+                throw new Error("The actual received decimal precision is " + str.split('.')[1].length + ", and the expected is " + precision);
             } else if (str.split('.')[1].length == precision) {
                 retStr = str
             } else {
