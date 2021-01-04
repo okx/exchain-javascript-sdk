@@ -8,7 +8,7 @@ const privateKey = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa101
 const serverUrl = "http://localhost:8545"
 const userAddress = "okexchain1jjvpmgwwgs99nhlje3aag0lackunqgj7xnrnwe"
 const chainId = "okexchainevm-81" // -testnet1
-const baseCoin = "tokt"
+const baseCoin = "okt"
 const testCoin = "xxb-781"
 const testProduct = testCoin + "_" + baseCoin
 
@@ -137,14 +137,14 @@ describe("OKEXChainClient test", async () => {
   it("send AddLiquidityTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendAddLiquidityTransaction("0.01001000", "100.00000000", "eth", "200.00000000", 'okt', 1602781334, 'AddLiquidityTransaction', data.sequence)
+    const res = await data.okclient.sendAddLiquidityTransaction("0.01001000", "100.00000000", "eth", "200.00000000", 'okt', "1619677667", 'AddLiquidityTransaction', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
   it("send RemoveLiquidityTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendRemoveLiquidityTransaction("0.01001000", "50.00000000", "eth", "100.00000000", 'okt', 1602781334, 'RemoveLiquidityTransaction', data.sequence)
+    const res = await data.okclient.sendRemoveLiquidityTransaction("0.01001000", "50.00000000", "eth", "100.00000000", 'okt', "1619677667", 'RemoveLiquidityTransaction', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
@@ -158,7 +158,7 @@ describe("OKEXChainClient test", async () => {
   it("send SwapTokenTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendSwapTokenTransaction("50.00000000", "aa11", "10.00000000", "okt", 1602781334, 'SwapTokenTransaction', '', data.sequence)
+    const res = await data.okclient.sendSwapTokenTransaction("50.00000000", "aa11", "10.00000000", "okt", "1612781334", userAddress, '', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
