@@ -26,7 +26,7 @@ var defaultFee = {
         denom: nativeDenom,
 
     }],
-    gas: "500000",
+    gas: "200000",
 }
 const precision = 18
 
