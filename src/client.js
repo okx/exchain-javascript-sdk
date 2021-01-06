@@ -431,6 +431,9 @@ export class OKEXChainClient {
 
     async sendRegisterDexOperatorTransaction(website, handling_fee_address, memo = "", sequenceNumber = null) {
 
+        if (!crypto.validateAddress(handling_fee_address)) {
+            throw new Error("invalid handling_fee_address")
+        }
         const msg = [{
             type: "okexchain/dex/CreateOperator",
             value: {
