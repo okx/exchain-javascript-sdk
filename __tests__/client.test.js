@@ -11,6 +11,7 @@ const chainId = "okexchainevm-81" // -testnet1
 const baseCoin = "okt"
 const testCoin = "xxb-781"
 const testProduct = testCoin + "_" + baseCoin
+const testPoolName = "aaa-882_okt"
 
 
 
@@ -162,4 +163,90 @@ describe("OKEXChainClient test", async () => {
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
+
+  // farm
+  it("send sendFarmCreatePoolTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmCreatePoolTransaction(testPoolName, baseCoin, 15, testCoin, "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+
+  it("send sendFarmDestroyPoolTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmDestroyPoolTransaction(testPoolName, "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+
+  it("send sendFarmProvideTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmProvideTransaction(testPoolName, testCoin, 100, 2, "11450", "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+
+  it("send sendFarmLockTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmLockTransaction(testPoolName, baseCoin, 1000, "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+
+  it("send sendFarmUnLockTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmUnLockTransaction(testPoolName, baseCoin, 500, "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+
+  it("send sendFarmClaimTransaction", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient(serverUrl, chainId)
+    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    const res = await client.sendFarmClaimTransaction(testPoolName , "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
+  
 })
