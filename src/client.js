@@ -678,4 +678,164 @@ export class OKEXChainClient {
         return res
     }
 
+     /**
+     * Send FarmCreatePoolTransaction.
+     * @param {String} pool_name
+     * @param {String} min_lock_denom 
+     * @param {Number} min_lock_amount 
+     * @param {String} yield_symbol
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo= '', sequenceNumber = null) {
+        const min_lock_coin = {
+            amount: this.formatNumber(min_lock_amount),
+            denom: min_lock_denom,
+        }
+        const msg = [{
+            type: "okexchain/farm/MsgCreatePool",
+            value: {
+                min_lock_amount: min_lock_coin,
+                owner: this.address,
+                pool_name: pool_name,
+                yielded_symbol: yield_symbol,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send FarmDestroyPoolTransaction.
+     * @param {String} pool_name
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmDestroyPoolTransaction(pool_name, memo= '', sequenceNumber = null) {
+        const msg = [{
+            type: "okexchain/farm/MsgDestroyPool",
+            value: {
+                owner: this.address,
+                pool_name: pool_name,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send FarmProvideTransaction.
+     * @param {String} pool_name
+     * @param {String} provide_denom 
+     * @param {Number} provide_amount 
+     * @param {Number} yielded_per_block 
+     * @param {String} start_height 
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo= '', sequenceNumber = null) {
+        const provide_coin = {
+            amount: this.formatNumber(provide_amount),
+            denom: provide_denom,
+        }
+        const msg = [{
+            type: "okexchain/farm/MsgProvide",
+            value: {
+                address: this.address,
+                amount: provide_coin,
+                amount_yielded_per_block: this.formatNumber(yielded_per_block),
+                pool_name: pool_name,
+                start_height_to_yield: start_height,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send FarmLockTransaction.
+     * @param {String} pool_name
+     * @param {String} lock_denom 
+     * @param {Number} lock_amount 
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo= '', sequenceNumber = null) {
+        const amount = {
+            amount: this.formatNumber(lock_amount),
+            denom: lock_denom,
+        }
+        const msg = [{
+            type: "okexchain/farm/MsgLock",
+            value: {
+                address: this.address,
+                amount: amount,
+                pool_name: pool_name,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send FarmUnLockTransaction.
+     * @param {String} pool_name
+     * @param {String} unlock_denom 
+     * @param {Number} unlock_amount 
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo= '', sequenceNumber = null) {
+        const amount = {
+            amount: this.formatNumber(unlock_amount),
+            denom: unlock_denom,
+        }
+        const msg = [{
+            type: "okexchain/farm/MsgUnlock",
+            value: {
+                address: this.address,
+                amount: amount,
+                pool_name: pool_name,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * Send FarmClaimTransaction.
+     * @param {String} pool_name
+     * @param {String} memo
+     * @param {Number} sequenceNumber
+     * @return {Object} response
+     */
+    async sendFarmClaimTransaction(pool_name, memo= '', sequenceNumber = null) {
+        const msg = [{
+            type: "okexchain/farm/MsgClaim",
+            value: {
+                address: this.address,
+                pool_name: pool_name,
+            }
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
 }
