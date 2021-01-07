@@ -11,11 +11,11 @@ import HttpProxy from "./httpProxy"
 
 const apiPath = {
     //rest server
-    txs: "/okexchain/v1/txs",
-    queryAccount: "/okexchain/v1/auth/accounts",
+    txs: "/okexchain-test/v1/txs",
+    queryAccount: "/okexchain-test/v1/auth/accounts",
 }
 
-const defaultChainId = "okexchaintestnet-1" //"test-chain-2yOdpj"
+const defaultChainId = "okexchain-65"
 
 const bech32Head = "okexchain"
 const mode = "block"
