@@ -22,11 +22,11 @@ const mode = "block"
 const nativeDenom = "okt" // t
 var defaultFee = {
     amount: [{
-        amount: "0.020000000000000000",
+        amount: "0.050000000000000000",
         denom: nativeDenom,
 
     }],
-    gas: "200000",
+    gas: "500000",
 }
 const precision = 18
 
@@ -681,8 +681,8 @@ export class OKEXChainClient {
      /**
      * Send FarmCreatePoolTransaction.
      * @param {String} pool_name
-     * @param {String} min_lock_denom 
-     * @param {Number} min_lock_amount 
+     * @param {String} min_lock_denom
+     * @param {Number} min_lock_amount
      * @param {String} yield_symbol
      * @param {String} memo
      * @param {Number} sequenceNumber
@@ -732,10 +732,10 @@ export class OKEXChainClient {
     /**
      * Send FarmProvideTransaction.
      * @param {String} pool_name
-     * @param {String} provide_denom 
-     * @param {Number} provide_amount 
-     * @param {Number} yielded_per_block 
-     * @param {String} start_height 
+     * @param {String} provide_denom
+     * @param {Number} provide_amount
+     * @param {Number} yielded_per_block
+     * @param {String} start_height
      * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
@@ -764,8 +764,8 @@ export class OKEXChainClient {
     /**
      * Send FarmLockTransaction.
      * @param {String} pool_name
-     * @param {String} lock_denom 
-     * @param {Number} lock_amount 
+     * @param {String} lock_denom
+     * @param {Number} lock_amount
      * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
@@ -792,8 +792,8 @@ export class OKEXChainClient {
     /**
      * Send FarmUnLockTransaction.
      * @param {String} pool_name
-     * @param {String} unlock_denom 
-     * @param {Number} unlock_amount 
+     * @param {String} unlock_denom
+     * @param {Number} unlock_amount
      * @param {String} memo
      * @param {Number} sequenceNumber
      * @return {Object} response
