@@ -18,16 +18,17 @@ class Transaction {
     this.msgs = param.msg
     this.memo = param.memo
     this.sequence = param.sequence
-
   }
 
 
   /**
-   * @param {string} privateKeyHex
+   * @param {String | Object} privateKeyHexOrSigner
    * @param {Object} msg
+   * @param {String} address
    * @return {Transaction}
    **/
-  sign(privateKeyHex, msg) {
+  async sign(privateKeyHexOrSigner, msg, address) {
+
     const signMsg = {
       "account_number": this.account_number.toString(),
       "chain_id": this.chain_id,
@@ -36,19 +37,33 @@ class Transaction {
       "msgs": msg,
       "sequence": this.sequence.toString(),
     }
-    console.log("signmsg: ",JSON.stringify(signMsg))
-    const jsonStr = JSON.stringify(signMsg)
-    const signBytes = Buffer.from(jsonStr)
-    const privateKey = Buffer.from(privateKeyHex, "hex")
-    const signature = crypto.sign(signBytes.toString("hex"), privateKey)
 
-    const pubKey = crypto.encodePubKeyToCompressedBuffer(crypto.getPubKeyFromPrivateKey(privateKey))
-    this.signatures = [{
-      pub_key: {
-        type:"ethermint/PubKeyEthSecp256k1",
-        value:pubKey},
-      signature: signature,
-    }]
+    console.log("signmsg: ",JSON.stringify(signMsg))
+
+    let signatures;
+
+    // PrivatekeyHex
+    if (typeof privateKeyHexOrSigner === 'string') {
+      const jsonStr = JSON.stringify(signMsg)
+      const signBytes = Buffer.from(jsonStr)
+      const privateKey = Buffer.from(privateKeyHexOrSigner, "hex")
+      const signature = crypto.sign(signBytes.toString("hex"), privateKey)
+      const pubKey = crypto.encodePubKeyToCompressedBuffer(crypto.getPubKeyFromPrivateKey(privateKey))
+      signatures = [{
+        pub_key: {
+          type:"ethermint/PubKeyEthSecp256k1",
+          value:pubKey},
+        signature: signature,
+      }]
+    }
+    // External Signer
+    if (typeof privateKeyHexOrSigner === 'object') {
+        let result  =  await privateKeyHexOrSigner.sign(signMsg, address);
+        signatures = result.signatures;
+    }
+
+    this.signatures = signatures;
+
     return this
   }
 
