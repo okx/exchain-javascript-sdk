@@ -8,18 +8,11 @@ import * as crypto from "./crypto"
 import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
 
-
-const apiPath = {
-    //rest server
-    txs: "/okexchain-test/v1/txs",
-    queryAccount: "/okexchain-test/v1/auth/accounts",
-}
-
-const defaultChainId = "okexchain-65"
-
+const defaultChainId = "okexchain-66"
+const defaultRelativePath = "/okexchain/v1"
 const bech32Head = "okexchain"
 const mode = "block"
-const nativeDenom = "okt" // t
+const nativeDenom = "okt"
 var defaultFee = {
     amount: [{
         amount: "0.050000000000000000",
@@ -43,15 +36,21 @@ export const GetClient = async (privateKey, url) => {
 export class OKEXChainClient {
     /**
      * @param {string} url
-     * @param {string} chainId
+     * @param {Object} config
+     * {
+     *     chainId: "okexchain-66" (mainnet, default) / "okexchain-65" (testnet)
+     *     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)
+     * }
      */
-    constructor(url, chainId) {
+    constructor(url, config) {
         if (!url) {
             throw new Error("null url")
         }
         this.httpClient = new HttpProxy(url)
         this.mode = mode
-        this.chainId = chainId || defaultChainId
+        this.chainId = (config && config.chainId) || defaultChainId
+        this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
+        this.queryAccountUrl = ((config && config.relativePath) || defaultRelativePath) + "/auth/accounts"
     }
 
     /**
@@ -260,7 +259,7 @@ export class OKEXChainClient {
                 "content-type": "text/plain",
             }
         }
-        return this.httpClient.send("post", `${apiPath.txs}`, null, opts)
+        return this.httpClient.send("post", this.PostUrl, null, opts)
     }
 
 
@@ -274,7 +273,7 @@ export class OKEXChainClient {
             throw new Error("address should not be falsy")
         }
         try {
-            const data = await this.httpClient.send("get", `${apiPath.queryAccount}/${address}`)
+            const data = await this.httpClient.send("get", `${this.queryAccountUrl}/${address}`)
             return data
         } catch (err) {
             return null
