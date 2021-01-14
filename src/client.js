@@ -40,6 +40,7 @@ export class OKEXChainClient {
      * {
      *     chainId: "okexchain-66" (mainnet, default) / "okexchain-65" (testnet)
      *     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)
+     *     signer: external signer object
      * }
      */
     constructor(url, config) {
@@ -51,6 +52,7 @@ export class OKEXChainClient {
         this.chainId = (config && config.chainId) || defaultChainId
         this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
         this.queryAccountUrl = ((config && config.relativePath) || defaultRelativePath) + "/auth/accounts"
+        this.signer = config.signer || null
     }
 
     /**
@@ -70,6 +72,20 @@ export class OKEXChainClient {
     }
 
     /**
+     * set the address
+     * @param {string} address
+     */
+    async setAddress(address) {
+        if (address !== this.address) {
+            this.address = address;
+            const data = await this.getAccount(address);
+            this.account_number = this.getAccountNumberFromAccountInfo(data);
+        }
+
+        return this
+    }
+
+    /**
      * @param {string} privateKey
      * @return {OKEXChainClient}
      */
@@ -81,7 +97,7 @@ export class OKEXChainClient {
             this.privateKey = privateKey
             this.address = address
             const data = await this.getAccount(address)
-            this.account_number = await this.getAccountNumberFromAccountInfo(data)
+            this.account_number = this.getAccountNumberFromAccountInfo(data)
         }
         return this
     }
@@ -224,11 +240,11 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Transaction} Transaction object
      */
-    async buildTransaction(msg, signMsg, memo = "", fee = null , sequenceNumber = null) {
-        if ((!this.account_number || !sequenceNumber)) {
+    async buildTransaction(msg, signMsg, memo = "", fee = null, sequenceNumber = null) {
+        if (!sequenceNumber) {
             const accountInfo = await this.getAccount()
-            sequenceNumber = await this.getSequenceNumberFromAccountInfo(accountInfo)
-            this.account_number = await this.getAccountNumberFromAccountInfo(accountInfo)
+            sequenceNumber = this.getSequenceNumberFromAccountInfo(accountInfo)
+            this.account_number = this.getAccountNumberFromAccountInfo(accountInfo)
         }
 
         const params = {
@@ -241,7 +257,13 @@ export class OKEXChainClient {
         }
 
         const tx = new Transaction(params)
-        return tx.sign(this.privateKey, signMsg)
+
+        if (this.signer) {
+            return await tx.sign(this.signer, signMsg, this.address);
+        }
+        else {
+            return tx.sign(this.privateKey, signMsg)
+        }
     }
 
     /**
@@ -322,7 +344,7 @@ export class OKEXChainClient {
      * @param {String} accountInfo
      * @return {Number} sequenceNumber
      */
-    async getSequenceNumberFromAccountInfo(accountInfo) {
+    getSequenceNumberFromAccountInfo(accountInfo) {
         return accountInfo.result.value.sequence
     }
 
@@ -331,7 +353,7 @@ export class OKEXChainClient {
      * @param {String} accountInfo
      * @return {Number} accountNumber
      */
-    async getAccountNumberFromAccountInfo(accountInfo) {
+    getAccountNumberFromAccountInfo(accountInfo) {
         return accountInfo.result.value.account_number
     }
 
@@ -347,7 +369,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', memo= '', sequenceNumber = null) {
+    async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', memo = '', sequenceNumber = null) {
 
         const msg = [{
             type: "okexchain/token/MsgIssue",
@@ -548,7 +570,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo= '', sequenceNumber = null) {
+    async sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo = '', sequenceNumber = null) {
 
         const base_coin = {
             amount: this.formatNumber(max_base_amount),
@@ -587,7 +609,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo= '', sequenceNumber = null) {
+    async sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo = '', sequenceNumber = null) {
 
         const base_coin = {
             amount: this.formatNumber(min_base_amount),
@@ -622,7 +644,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendCreateExchangeTransaction(Token0Name, Token1Name, memo= '', sequenceNumber = null) {
+    async sendCreateExchangeTransaction(Token0Name, Token1Name, memo = '', sequenceNumber = null) {
 
         const msg = [{
             type: "okexchain/ammswap/MsgCreateExchange",
@@ -650,7 +672,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo= '', sequenceNumber = null) {
+    async sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo = '', sequenceNumber = null) {
 
         const sold_coin = {
             amount: this.formatNumber(sold_token_amount),
@@ -677,7 +699,7 @@ export class OKEXChainClient {
         return res
     }
 
-     /**
+    /**
      * Send FarmCreatePoolTransaction.
      * @param {String} pool_name
      * @param {String} min_lock_denom
@@ -687,7 +709,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo= '', sequenceNumber = null) {
+    async sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo = '', sequenceNumber = null) {
         const min_lock_coin = {
             amount: this.formatNumber(min_lock_amount),
             denom: min_lock_denom,
@@ -714,7 +736,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmDestroyPoolTransaction(pool_name, memo= '', sequenceNumber = null) {
+    async sendFarmDestroyPoolTransaction(pool_name, memo = '', sequenceNumber = null) {
         const msg = [{
             type: "okexchain/farm/MsgDestroyPool",
             value: {
@@ -739,7 +761,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo= '', sequenceNumber = null) {
+    async sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo = '', sequenceNumber = null) {
         const provide_coin = {
             amount: this.formatNumber(provide_amount),
             denom: provide_denom,
@@ -769,7 +791,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo= '', sequenceNumber = null) {
+    async sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo = '', sequenceNumber = null) {
         const amount = {
             amount: this.formatNumber(lock_amount),
             denom: lock_denom,
@@ -797,7 +819,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo= '', sequenceNumber = null) {
+    async sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo = '', sequenceNumber = null) {
         const amount = {
             amount: this.formatNumber(unlock_amount),
             denom: unlock_denom,
@@ -823,7 +845,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Object} response
      */
-    async sendFarmClaimTransaction(pool_name, memo= '', sequenceNumber = null) {
+    async sendFarmClaimTransaction(pool_name, memo = '', sequenceNumber = null) {
         const msg = [{
             type: "okexchain/farm/MsgClaim",
             value: {
