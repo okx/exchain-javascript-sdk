@@ -19,7 +19,9 @@ describe("OKEXChainClient test", async () => {
 
 
   it("get balance", async () => {
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     const res = await client.getBalance(userAddress)
@@ -28,7 +30,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -43,7 +47,9 @@ describe("OKEXChainClient test", async () => {
   it("send placeOrderTransaction,cancelOrderTransaction", async () => {
     jest.setTimeout(20000)
     const symbol = testProduct
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -67,7 +73,9 @@ describe("OKEXChainClient test", async () => {
   })
 
    async function  prepareAccount() {
-    const client = new OKEXChainClient(serverUrl, chainId)
+     const client = new OKEXChainClient(serverUrl, {
+       chainId: chainId
+     })
     const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     const addr = crypto.getAddressFromPrivateKey(client.privateKey)
@@ -167,7 +175,9 @@ describe("OKEXChainClient test", async () => {
   // farm
   it("send sendFarmCreatePoolTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -181,7 +191,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendFarmDestroyPoolTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -195,7 +207,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendFarmProvideTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -209,7 +223,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendFarmLockTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -223,7 +239,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendFarmUnLockTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)
@@ -237,7 +255,9 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendFarmClaimTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, chainId)
+    const client = new OKEXChainClient(serverUrl, {
+      chainId: chainId
+    })
     // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     await client.setAccountInfo(privateKey)
     //console.log(client)

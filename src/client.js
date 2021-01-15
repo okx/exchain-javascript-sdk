@@ -52,7 +52,7 @@ export class OKEXChainClient {
         this.chainId = (config && config.chainId) || defaultChainId
         this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
         this.queryAccountUrl = ((config && config.relativePath) || defaultRelativePath) + "/auth/accounts"
-        this.signer = config.signer || null
+        this.signer = (config && config.signer) || null
     }
 
     /**
