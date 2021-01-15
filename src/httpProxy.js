@@ -52,10 +52,14 @@ class HttpProxy {
           detail_msg: ''
         }
         const data = response.data || null;
-        if (data.code) {
-          fmtResponse.code = cosmosCode[data.code] ? cosmosCode[data.code] : data.code
-          fmtResponse.msg = data.raw_log || ''
-          fmtResponse.detail_msg = fmtResponse.msg
+        if(data) {
+            if (data.code) {
+                fmtResponse.code = cosmosCode[data.code] ? cosmosCode[data.code] : data.code
+                fmtResponse.msg = data.raw_log || ''
+                fmtResponse.detail_msg = fmtResponse.msg
+            } else {
+                fmtResponse.data = data.txhash || null;
+            }
         }
         return { result: fmtResponse, status: response.status }
       }).catch(err => {
