@@ -63,7 +63,7 @@ class HttpProxy {
         } else {
             fmtResponse.code = -1
             fmtResponse.data = ''
-            fmtResponse.msg = 'no response'
+            fmtResponse.msg = 'response data return null'
         }
         return { result: fmtResponse, status: response.status }
       }).catch(err => {
