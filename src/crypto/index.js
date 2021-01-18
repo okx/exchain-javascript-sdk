@@ -154,8 +154,7 @@ export const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
  */
 export const sign = (msgHex, privateKey) => {
   const msg = Buffer.from(msgHex, "hex")
-  const msgHashHex = createKeccakHash('keccak256').update(msg).digest()
-  const msgHash = Buffer.from(msgHashHex, "hex")
+  const msgHash = createKeccakHash('keccak256').update(msg).digest()
   const signature = ecc.sign(msgHash, Buffer.from(privateKey, "hex")) // enc ignored if buffer
   return signature
 }
