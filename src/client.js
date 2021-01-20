@@ -13,7 +13,7 @@ const defaultRelativePath = "/okexchain/v1"
 const bech32Head = "okexchain"
 const mode = "block"
 const nativeDenom = "okt"
-var defaultFee = {
+const defaultTestnetFee = {
     amount: [{
         amount: "0.050000000000000000",
         denom: nativeDenom,
@@ -21,6 +21,15 @@ var defaultFee = {
     }],
     gas: "500000",
 }
+const defaultMainnetFee = {
+    amount: [{
+        amount: "0.000500000000000000",
+        denom: nativeDenom,
+
+    }],
+    gas: "500000",
+}
+var defaultFee = defaultMainnetFee
 const precision = 18
 
 
@@ -40,7 +49,8 @@ export class OKEXChainClient {
      * {
      *     chainId: "okexchain-66" (mainnet, default) / "okexchain-65" (testnet)
      *     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)
-     *     signer: external signer object
+     *     isMainnet: true (mainnet) / false (other, default)
+     *     signer: external signer object, Object / null (default)
      * }
      */
     constructor(url, config) {
@@ -52,7 +62,14 @@ export class OKEXChainClient {
         this.chainId = (config && config.chainId) || defaultChainId
         this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
         this.queryAccountUrl = ((config && config.relativePath) || defaultRelativePath) + "/auth/accounts"
+        this.isMainnet = (config && config.isMainnet) || false
         this.signer = (config && config.signer) || null
+
+        if (this.isMainnet) {
+            defaultFee = defaultMainnetFee
+        } else {
+            defaultFee = defaultTestnetFee
+        }
     }
 
     /**
