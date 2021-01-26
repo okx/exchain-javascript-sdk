@@ -54,5 +54,12 @@ describe("crypto", () => {
     expect(crypto.validateSig(sig, msg, publicKey)).toBeTruthy()
   })
 
+  it("bech32 and hex", () => {
+    let bech32Address = "okexchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptddw77gw"
+    let hexAddress = crypto.convertBech32ToHex(bech32Address)
+    let newBech32Address = crypto.convertHexToBech32(hexAddress)
+    expect(bech32Address).toBe(newBech32Address)
+  })
+
 
 })

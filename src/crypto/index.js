@@ -60,8 +60,21 @@ export const validateAddress = (addr) => {
  * @return {string} address with bech32 format
  */
 export const encodeAddressToBech32 = (hexAddr, prefix = "okexchain") => {
+  hexAddr = hexAddr.slice(0, 2) === '0x' ? hexAddr.slice(2) : hexAddr
   const words = bech32.toWords(Buffer.from(hexAddr, "hex"))
   return bech32.encode(prefix, words)
+}
+
+function buf2hex(buffer) { // buffer is an ArrayBuffer
+  return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+export const convertBech32ToHex = (bech32Address) => {
+  const address = decodeAddressToBuffer(bech32Address)
+  return "0x"+buf2hex(address)
+}
+
+export const convertHexToBech32 = (hexAddress) => {
+  return encodeAddressToBech32(hexAddress)
 }
 
 /**
