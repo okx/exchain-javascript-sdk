@@ -221,7 +221,7 @@ export const generateKeyStore = (privateKeyHex, password) => {
     throw new Error("createCipheriv has been failed")
   }
 
-  const ciphertext = Buffer.concat([cipher.update(Buffer.from(privateKeyHex, "hex")), cipher.final()])
+  const ciphertext = Buffer.concat([cipher.update(Buffer.from(privateKeyHex.toLowerCase(), "hex")), cipher.final()])
   const bufferValue = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(ciphertext, "hex")])
   return {
     crypto: {
