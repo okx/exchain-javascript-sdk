@@ -17,6 +17,9 @@ import RIPEMD160 from "crypto-js/ripemd160"
 import { Buffer } from "buffer"
 import secp256k1 from "secp256k1"
 import createKeccakHash from "keccak"
+import SHA3 from "crypto-js/sha3"
+import scrypt from "scrypt-js"
+var utils = require('web3-utils');
 
 // 浏览器端实现
 const sync = require('./scrypt-sync')
@@ -195,51 +198,51 @@ export const validateSig = (sigHex, msgHex, pubKeyHex) => {
  * @returns {object}
  */
 export const generateKeyStore = (privateKeyHex, password) => {
-  const salt = cryp.randomBytes(32)
-  const iv = cryp.randomBytes(16)
-  const cipherAlg = "aes-128-ctr"
+  var salt = cryp.randomBytes(32);
+  var iv = cryp.randomBytes(16);
 
-  const kdf = "scrypt"
-  const kdfparams = {
+  var derivedKey;
+  var kdf = 'scrypt';
+  var kdfparams = {
     dklen: 32,
-    salt: salt.toString("hex"),
-    n: 262144,
-    p: 1,
-    r: 8,
-    //prf: "hmac-sha256"
-  }
-  const options = {
-    N: kdfparams.n,
-    r: kdfparams.r,
-    p: kdfparams.p,
-    maxmem: 1024*1024*1024*2,
-  }
+    salt: salt.toString('hex')
+  };
 
-  const derivedKey = sync(Buffer.from(password),salt,kdfparams.dklen,options)
-  const cipher = cryp.createCipheriv(cipherAlg, derivedKey.slice(0, 16), iv)
+  // FIXME: support progress reporting callback
+  kdfparams.n = 8192; // 2048 4096 8192 16384
+  kdfparams.r = 8;
+  kdfparams.p = 1;
+  derivedKey = scrypt.syncScrypt(Buffer.from(password), Buffer.from(kdfparams.salt, 'hex'), kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen);
+
+  var cipher = cryp.createCipheriv('aes-128-ctr', derivedKey.slice(0, 16), iv);
   if (!cipher) {
-    throw new Error("createCipheriv has been failed")
+    throw new Error('Unsupported cipher');
   }
 
-  const ciphertext = Buffer.concat([cipher.update(Buffer.from(privateKeyHex.toLowerCase(), "hex")), cipher.final()])
-  const bufferValue = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(ciphertext, "hex")])
+  var ciphertext = Buffer.from([
+    ...cipher.update(Buffer.from(privateKeyHex.replace('0x', ''), 'hex')),
+    ...cipher.final()]
+  );
+
+  var mac = utils.sha3(Buffer.from([...derivedKey.slice(16, 32), ...ciphertext])).replace('0x', '');
+
   return {
-    crypto: {
-      ciphertext: ciphertext.toString("hex"),
-      cipherparams: {
-        iv: iv.toString("hex")
-      },
-      cipher: cipherAlg,
-      kdf,
-      kdfparams: kdfparams,
-      mac: sha256(bufferValue.toString("hex"))
-    },
-    id: uuid.v4({
-      random: cryp.randomBytes(16)
-    }),
     version: 3,
-  }
+    id: uuid.v4({random: cryp.randomBytes(16)}),
+    // address: account.address.toLowerCase().replace('0x', ''),
+    crypto: {
+      ciphertext: ciphertext.toString('hex'),
+      cipherparams: {
+        iv: iv.toString('hex')
+      },
+      cipher: 'aes-128-ctr',
+      kdf: kdf,
+      kdfparams: kdfparams,
+      mac: mac.toString('hex')
+    }
+  };
 }
+
 /**
  * Get privateKey from keyStore.
  * @param {string | object} keystore
@@ -327,4 +330,3 @@ export const sha256 = (hex) => {
   const hexEncoded = hexEncoding.parse(hex)
   return SHA256(hexEncoded).toString()
 }
-
