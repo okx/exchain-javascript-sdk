@@ -23,8 +23,15 @@ const sync = require('./scrypt-sync')
 
 
 const MNEMONIC_ENTROPY_LEN = 128
-const HD_PATH = "44'/996'/0'/0/0"
+// const HD_PATH = "44'/996'/0'/0/0"
 
+/**
+ * Get HD path by cointype param .
+ * @param {string} cointype, default 60
+ */
+export const getHDPath = function (cointype) {
+  return "44'/" + (cointype || '60') + "'/0'/0/0"
+}
 
 /**
  * Decode address from bech32 to buffer.
@@ -290,15 +297,16 @@ export const validateMnemonic = bip39.validateMnemonic
 /**
  * Get private key from mnemonic.
  * @param {string} mnemonic
+ * @param {string} cointype, default 60
  * @return {string} hexstring
  */
-export const getPrivateKeyFromMnemonic = (mnemonic) => {
+export const getPrivateKeyFromMnemonic = (mnemonic, cointype) => {
   if(!bip39.validateMnemonic(mnemonic)){
     throw new Error("invalid mnemonic format")
   }
   const seed = bip39.mnemonicToSeed(mnemonic)
   const master = bip32.fromSeed(seed)
-  const child = master.derivePath(HD_PATH)
+  const child = master.derivePath(getHDPath(cointype))
   return child.privateKey.toString("hex")
 }
 
