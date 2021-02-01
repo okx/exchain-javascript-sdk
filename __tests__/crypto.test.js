@@ -26,8 +26,13 @@ describe("crypto", () => {
 
 
   it("getPrivateKeyFromMnemonic", () => {
-    const pk = crypto.getPrivateKeyFromMnemonic("total lottery arena when pudding best candy until army spoil drill pool")
-    expect(pk.toString("hex")).toBe("29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884")
+    const pk_60 = crypto.getPrivateKeyFromMnemonic("total lottery arena when pudding best candy until army spoil drill pool", '60')
+    const pk_996 = crypto.getPrivateKeyFromMnemonic("total lottery arena when pudding best candy until army spoil drill pool", '996')
+    const address_60 = crypto.getAddressFromPrivateKey(pk_60)
+    const address_996 = crypto.getAddressFromPrivateKey(pk_996)
+    console.log('address', address_60, address_996)
+    expect(pk_60.toString("hex")).toBe("828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997")
+    expect(pk_996.toString("hex")).toBe("29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884")
   })
 
   it("generateMnemonic", ()=>{
