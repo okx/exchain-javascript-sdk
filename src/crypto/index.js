@@ -17,6 +17,8 @@ import RIPEMD160 from "crypto-js/ripemd160"
 import { Buffer } from "buffer"
 import secp256k1 from "secp256k1"
 import createKeccakHash from "keccak"
+import Hash from "eth-lib/lib/hash"
+import BN from 'bn.js'
 
 // 浏览器端实现
 const sync = require('./scrypt-sync')
@@ -77,12 +79,92 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 }
 export const convertBech32ToHex = (bech32Address) => {
   const address = decodeAddressToBuffer(bech32Address)
-  return "0x"+buf2hex(address)
+  return toChecksumAddress("0x"+buf2hex(address))
 }
 
 export const convertHexToBech32 = (hexAddress) => {
-  return encodeAddressToBech32(hexAddress)
+  return encodeAddressToBech32(hexAddress.toLowerCase())
 }
+
+
+/**
+ * Returns true if object is BN, otherwise false
+ *
+ * @method isBN
+ * @param {Object} object
+ * @return {Boolean}
+ */
+var isBN = function (object) {
+  return BN.isBN(object);
+};
+
+/**
+ * Check if string is HEX, requires a 0x in front
+ *
+ * @method isHexStrict
+ * @param {String} hex to be checked
+ * @returns {Boolean}
+ */
+var isHexStrict = function (hex) {
+  return ((_.isString(hex) || _.isNumber(hex)) && /^(-)?0x[0-9a-f]*$/i.test(hex));
+};
+
+/**
+ * Hashes values to a sha3 hash using keccak 256
+ *
+ * To hash a HEX string the hex must have 0x in front.
+ *
+ * @method sha3
+ * @return {String} the sha3 string
+ */
+var SHA3_NULL_S = '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
+
+export const sha3 = function (value) {
+  if (isBN(value)) {
+    value = value.toString();
+  }
+
+  if (isHexStrict(value) && /^0x/i.test((value).toString())) {
+    value = hexToBytes(value);
+  }
+
+  var returnValue = Hash.keccak256(value); // jshint ignore:line
+
+  if(returnValue === SHA3_NULL_S) {
+    return null;
+  } else {
+    return returnValue;
+  }
+};
+
+/**
+ * Converts to a checksum address
+ *
+ * @method toChecksumAddress
+ * @param {String} address the given HEX address
+ * @return {String}
+ */
+export const toChecksumAddress = function (address) {
+  if (typeof address === 'undefined') return '';
+
+  if (!/^(0x)?[0-9a-f]{40}$/i.test(address))
+    throw new Error('Given address "'+ address +'" is not a valid Ethereum address.');
+
+  address = address.toLowerCase().replace(/^0x/i,'');
+  var addressHash = sha3(address).replace(/^0x/i,'');
+  var checksumAddress = '0x';
+
+  for (var i = 0; i < address.length; i++ ) {
+    // If ith character is 8 to f then make it uppercase
+    if (parseInt(addressHash[i], 16) > 7) {
+      checksumAddress += address[i].toUpperCase();
+    } else {
+      checksumAddress += address[i];
+    }
+  }
+  return checksumAddress;
+};
+
 
 /**
  * Generates privateKey.
