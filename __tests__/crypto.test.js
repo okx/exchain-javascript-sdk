@@ -62,7 +62,9 @@ describe("crypto", () => {
   it("bech32 and hex", () => {
     let bech32Address = "okexchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptddw77gw"
     let hexAddress = crypto.convertBech32ToHex(bech32Address)
+    console.log('hexAddress', hexAddress);
     let newBech32Address = crypto.convertHexToBech32(hexAddress)
+    console.log('newBech32Address', newBech32Address)
     expect(bech32Address).toBe(newBech32Address)
   })
 
