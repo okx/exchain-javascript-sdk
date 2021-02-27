@@ -132,6 +132,10 @@ export class OKEXChainClient {
 
     async sendSendTransaction(to, amount, denom, memo = "", sequenceNumber = null) {
 
+        if (to.slice(0, 2) === '0x') {
+            to = crypto.encodeAddressToBech32(to)
+        }
+
         const coin = {
             amount: this.formatNumber(amount),
             denom: denom,
