@@ -1,310 +1,557 @@
-<a name="module_crypto"></a>
+<a name="module_client"></a>
 
-## crypto
+## client
 
-* [crypto](#module_crypto)
-    * _static_
-        * [.getHDPath](#module_crypto.getHDPath)
-        * [.decodeAddressToBuffer](#module_crypto.decodeAddressToBuffer)
-        * [.validateAddress](#module_crypto.validateAddress) ⇒ <code>boolean</code>
-        * [.encodeAddressToBech32](#module_crypto.encodeAddressToBech32) ⇒ <code>string</code>
-        * [.generatePrivateKey](#module_crypto.generatePrivateKey) ⇒ <code>string</code>
-        * [.getPubKeyFromHex](#module_crypto.getPubKeyFromHex) ⇒ <code>Elliptic.PublicKey</code>
-        * [.encodePubKeyToCompressedBuffer](#module_crypto.encodePubKeyToCompressedBuffer) ⇒ <code>Buffer</code>
-        * [.getPubKeyHexFromPrivateKey](#module_crypto.getPubKeyHexFromPrivateKey) ⇒ <code>string</code>
-        * [.getPubKeyFromPrivateKey](#module_crypto.getPubKeyFromPrivateKey) ⇒ <code>Elliptic.PublicKey</code>
-        * [.getAddressFromPubKey](#module_crypto.getAddressFromPubKey) ⇒ <code>string</code>
-        * [.getAddressFromPrivateKey](#module_crypto.getAddressFromPrivateKey) ⇒ <code>string</code>
-        * [.sign](#module_crypto.sign) ⇒ <code>Buffer</code>
-        * [.validateSig](#module_crypto.validateSig) ⇒ <code>boolean</code>
-        * [.generateKeyStore](#module_crypto.generateKeyStore) ⇒ <code>object</code>
-        * [.getPrivateKeyFromKeyStore](#module_crypto.getPrivateKeyFromKeyStore) ⇒ <code>string</code>
-        * [.generateMnemonic](#module_crypto.generateMnemonic) ⇒ <code>string</code>
-        * [.validateMnemonic](#module_crypto.validateMnemonic) ⇒ <code>bool</code>
-        * [.getPrivateKeyFromMnemonic](#module_crypto.getPrivateKeyFromMnemonic) ⇒ <code>string</code>
-        * [.sha256Ripemd160](#module_crypto.sha256Ripemd160) ⇒ <code>string</code>
-        * [.sha256](#module_crypto.sha256) ⇒ <code>string</code>
-    * _inner_
-        * [~isBN(object)](#module_crypto..isBN) ⇒ <code>Boolean</code>
-        * [~isHexStrict(hex)](#module_crypto..isHexStrict) ⇒ <code>Boolean</code>
-        * [~sha3()](#module_crypto..sha3) ⇒ <code>String</code>
-        * [~toChecksumAddress(address)](#module_crypto..toChecksumAddress) ⇒ <code>String</code>
+* [client](#module_client)
+    * [.OKEXChainClient](#module_client.OKEXChainClient)
+        * [new exports.OKEXChainClient(url, config)](#new_module_client.OKEXChainClient_new)
+        * [.setMode(mode)](#module_client.OKEXChainClient+setMode)
+        * [.setChainId(id)](#module_client.OKEXChainClient+setChainId)
+        * [.setAddress(address)](#module_client.OKEXChainClient+setAddress)
+        * [.setAccountInfo(privateKey)](#module_client.OKEXChainClient+setAccountInfo) ⇒ <code>OKEXChainClient</code>
+        * [.sendSendTransaction(to, amount, denom, memo, sequenceNumber)](#module_client.OKEXChainClient+sendSendTransaction) ⇒ <code>Object</code>
+        * [.sendCancelOrderTransaction(orderId, memo, sequenceNumber)](#module_client.OKEXChainClient+sendCancelOrderTransaction) ⇒ <code>Object</code>
+        * [.sendPlaceOrderTransaction(product, side, price, quantity, memo, sequence)](#module_client.OKEXChainClient+sendPlaceOrderTransaction) ⇒ <code>Object</code>
+        * [.buildTransaction(msg, signMsg, memo, fee, sequenceNumber)](#module_client.OKEXChainClient+buildTransaction) ⇒ <code>Transaction</code>
+        * [.sendTransaction(tx, mode)](#module_client.OKEXChainClient+sendTransaction) ⇒ <code>Object</code>
+        * [.getAccount(address)](#module_client.OKEXChainClient+getAccount) ⇒ <code>Object</code>
+        * [.getBalance(address)](#module_client.OKEXChainClient+getBalance) ⇒ <code>Object</code>
+        * [.getBalanceFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getBalanceFromAccountInfo) ⇒ <code>Object</code>
+        * [.getSequenceNumber(address)](#module_client.OKEXChainClient+getSequenceNumber) ⇒ <code>Number</code>
+        * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
+        * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
+        * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+        * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
+        * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
+        * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKEXChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
+        * [.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber)](#module_client.OKEXChainClient+sendListTokenPairTransaction) ⇒ <code>Object</code>
+        * [.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKEXChainClient+sendAddProductDepositTransaction) ⇒ <code>Object</code>
+        * [.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKEXChainClient+sendWithdrawProductDepositTransaction) ⇒ <code>Object</code>
+        * [.sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo, sequenceNumber)](#module_client.OKEXChainClient+sendAddLiquidityTransaction) ⇒ <code>Object</code>
+        * [.sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo, sequenceNumber)](#module_client.OKEXChainClient+sendRemoveLiquidityTransaction) ⇒ <code>Object</code>
+        * [.sendCreateExchangeTransaction(Token0Name, Token1Name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendCreateExchangeTransaction) ⇒ <code>Object</code>
+        * [.sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo, sequenceNumber)](#module_client.OKEXChainClient+sendSwapTokenTransaction) ⇒ <code>Object</code>
+        * [.sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmCreatePoolTransaction) ⇒ <code>Object</code>
+        * [.sendFarmDestroyPoolTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmDestroyPoolTransaction) ⇒ <code>Object</code>
+        * [.sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmProvideTransaction) ⇒ <code>Object</code>
+        * [.sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmLockTransaction) ⇒ <code>Object</code>
+        * [.sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmUnLockTransaction) ⇒ <code>Object</code>
+        * [.sendFarmClaimTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmClaimTransaction) ⇒ <code>Object</code>
 
-<a name="module_crypto.getHDPath"></a>
+<a name="module_client.OKEXChainClient"></a>
 
-### crypto.getHDPath
-Get HD path by cointype param .
+### client.OKEXChainClient
+The OKEXChain client.
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+**Kind**: static class of [<code>client</code>](#module_client)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| cointype, | <code>string</code> | default 60 |
+* [.OKEXChainClient](#module_client.OKEXChainClient)
+    * [new exports.OKEXChainClient(url, config)](#new_module_client.OKEXChainClient_new)
+    * [.setMode(mode)](#module_client.OKEXChainClient+setMode)
+    * [.setChainId(id)](#module_client.OKEXChainClient+setChainId)
+    * [.setAddress(address)](#module_client.OKEXChainClient+setAddress)
+    * [.setAccountInfo(privateKey)](#module_client.OKEXChainClient+setAccountInfo) ⇒ <code>OKEXChainClient</code>
+    * [.sendSendTransaction(to, amount, denom, memo, sequenceNumber)](#module_client.OKEXChainClient+sendSendTransaction) ⇒ <code>Object</code>
+    * [.sendCancelOrderTransaction(orderId, memo, sequenceNumber)](#module_client.OKEXChainClient+sendCancelOrderTransaction) ⇒ <code>Object</code>
+    * [.sendPlaceOrderTransaction(product, side, price, quantity, memo, sequence)](#module_client.OKEXChainClient+sendPlaceOrderTransaction) ⇒ <code>Object</code>
+    * [.buildTransaction(msg, signMsg, memo, fee, sequenceNumber)](#module_client.OKEXChainClient+buildTransaction) ⇒ <code>Transaction</code>
+    * [.sendTransaction(tx, mode)](#module_client.OKEXChainClient+sendTransaction) ⇒ <code>Object</code>
+    * [.getAccount(address)](#module_client.OKEXChainClient+getAccount) ⇒ <code>Object</code>
+    * [.getBalance(address)](#module_client.OKEXChainClient+getBalance) ⇒ <code>Object</code>
+    * [.getBalanceFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getBalanceFromAccountInfo) ⇒ <code>Object</code>
+    * [.getSequenceNumber(address)](#module_client.OKEXChainClient+getSequenceNumber) ⇒ <code>Number</code>
+    * [.getSequenceNumberFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getSequenceNumberFromAccountInfo) ⇒ <code>Number</code>
+    * [.getAccountNumberFromAccountInfo(accountInfo)](#module_client.OKEXChainClient+getAccountNumberFromAccountInfo) ⇒ <code>Number</code>
+    * [.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenIssueTransaction) ⇒ <code>Object</code>
+    * [.sendTokenBurnTransaction(token, amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenBurnTransaction) ⇒ <code>Object</code>
+    * [.sendTokenMintTransaction(token, amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendTokenMintTransaction) ⇒ <code>Object</code>
+    * [.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber)](#module_client.OKEXChainClient+sendRegisterDexOperatorTransaction) ⇒ <code>Object</code>
+    * [.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber)](#module_client.OKEXChainClient+sendListTokenPairTransaction) ⇒ <code>Object</code>
+    * [.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKEXChainClient+sendAddProductDepositTransaction) ⇒ <code>Object</code>
+    * [.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber)](#module_client.OKEXChainClient+sendWithdrawProductDepositTransaction) ⇒ <code>Object</code>
+    * [.sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo, sequenceNumber)](#module_client.OKEXChainClient+sendAddLiquidityTransaction) ⇒ <code>Object</code>
+    * [.sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo, sequenceNumber)](#module_client.OKEXChainClient+sendRemoveLiquidityTransaction) ⇒ <code>Object</code>
+    * [.sendCreateExchangeTransaction(Token0Name, Token1Name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendCreateExchangeTransaction) ⇒ <code>Object</code>
+    * [.sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo, sequenceNumber)](#module_client.OKEXChainClient+sendSwapTokenTransaction) ⇒ <code>Object</code>
+    * [.sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmCreatePoolTransaction) ⇒ <code>Object</code>
+    * [.sendFarmDestroyPoolTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmDestroyPoolTransaction) ⇒ <code>Object</code>
+    * [.sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmProvideTransaction) ⇒ <code>Object</code>
+    * [.sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmLockTransaction) ⇒ <code>Object</code>
+    * [.sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmUnLockTransaction) ⇒ <code>Object</code>
+    * [.sendFarmClaimTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmClaimTransaction) ⇒ <code>Object</code>
 
-<a name="module_crypto.decodeAddressToBuffer"></a>
+<a name="new_module_client.OKEXChainClient_new"></a>
 
-### crypto.decodeAddressToBuffer
-Decode address from bech32 to buffer.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| addr | <code>string</code> | bech32 format |
-
-<a name="module_crypto.validateAddress"></a>
-
-### crypto.validateAddress ⇒ <code>boolean</code>
-Validate address.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| addr | <code>string</code> | bech32 format |
-
-<a name="module_crypto.encodeAddressToBech32"></a>
-
-### crypto.encodeAddressToBech32 ⇒ <code>string</code>
-Encodes address from hex to bech32 format.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - address with bech32 format  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| hexAddr | <code>string</code> | address in hex string |
-| prefix | <code>string</code> | address prefix |
-
-<a name="module_crypto.generatePrivateKey"></a>
-
-### crypto.generatePrivateKey ⇒ <code>string</code>
-Generates privateKey.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - privateKey hex string  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| len | <code>number</code> | privateKey length (default: 32 bytes) |
-
-<a name="module_crypto.getPubKeyFromHex"></a>
-
-### crypto.getPubKeyFromHex ⇒ <code>Elliptic.PublicKey</code>
-Get publicKey from hex string.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>Elliptic.PublicKey</code> - pubKey  
+#### new exports.OKEXChainClient(url, config)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| publicKey | <code>string</code> | pubKey with hex string format |
+| url | <code>string</code> |  |
+| config | <code>Object</code> | {     chainId: "okexchain-66" (mainnet, default) / "okexchain-65" (testnet)     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)     isMainnet: true (mainnet) / false (other, default)     signer: external signer object, Object / null (default) } |
 
-<a name="module_crypto.encodePubKeyToCompressedBuffer"></a>
+<a name="module_client.OKEXChainClient+setMode"></a>
 
-### crypto.encodePubKeyToCompressedBuffer ⇒ <code>Buffer</code>
-Encode pubKey to compressed pubKey buffer.
+#### okexChainClient.setMode(mode)
+set the mode when send transaction
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mode | <code>string</code> | block|sync|async |
+
+<a name="module_client.OKEXChainClient+setChainId"></a>
+
+#### okexChainClient.setChainId(id)
+set the chainId when send transaction
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
 
 | Param | Type |
 | --- | --- |
-| pubKey | <code>Elliptic.PublicKey</code> | 
+| id | <code>string</code> | 
 
-<a name="module_crypto.getPubKeyHexFromPrivateKey"></a>
+<a name="module_client.OKEXChainClient+setAddress"></a>
 
-### crypto.getPubKeyHexFromPrivateKey ⇒ <code>string</code>
-Get public key from  private key.
+#### okexChainClient.setAddress(address)
+set the address
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - public key in hex string  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKeyHex | <code>string</code> | the private key hex string |
-
-<a name="module_crypto.getPubKeyFromPrivateKey"></a>
-
-### crypto.getPubKeyFromPrivateKey ⇒ <code>Elliptic.PublicKey</code>
-Get public key from  private key.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>Elliptic.PublicKey</code> - PubKey  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
 
 | Param | Type |
 | --- | --- |
-| privateKey | <code>Buffer</code> | 
+| address | <code>string</code> | 
 
-<a name="module_crypto.getAddressFromPubKey"></a>
+<a name="module_client.OKEXChainClient+setAccountInfo"></a>
 
-### crypto.getAddressFromPubKey ⇒ <code>string</code>
-Gets address from pubKey with hex format.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - address  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| publicKey | <code>string</code> | publicKey hexstring |
-| prefix | <code>string</code> | address prefix |
-
-<a name="module_crypto.getAddressFromPrivateKey"></a>
-
-### crypto.getAddressFromPrivateKey ⇒ <code>string</code>
-Get address from private key.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - address  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKeyHex | <code>string</code> | the private key hexstring |
-| prefix | <code>string</code> | address prefix |
-
-<a name="module_crypto.sign"></a>
-
-### crypto.sign ⇒ <code>Buffer</code>
-Sign msg with privateKey and Msg in hex format.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>Buffer</code> - Signature.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| msgHex | <code>string</code> | msg in hex format. |
-| privateKey | <code>string</code> | The private key in hex format. |
-
-<a name="module_crypto.validateSig"></a>
-
-### crypto.validateSig ⇒ <code>boolean</code>
-Validate signature.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| sigHex | <code>string</code> | signature in hex format |
-| msgHex | <code>string</code> | msg in hex format. |
-| pubKeyHex | <code>string</code> | public key in hex format |
-
-<a name="module_crypto.generateKeyStore"></a>
-
-### crypto.generateKeyStore ⇒ <code>object</code>
-Generate KeyStore with privateKey and password.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+#### okexChainClient.setAccountInfo(privateKey) ⇒ <code>OKEXChainClient</code>
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
 
 | Param | Type |
 | --- | --- |
-| privateKeyHex | <code>string</code> | 
-| password | <code>string</code> | 
+| privateKey | <code>string</code> | 
 
-<a name="module_crypto.getPrivateKeyFromKeyStore"></a>
+<a name="module_client.OKEXChainClient+sendSendTransaction"></a>
 
-### crypto.getPrivateKeyFromKeyStore ⇒ <code>string</code>
-Get privateKey from keyStore.
+#### okexChainClient.sendSendTransaction(to, amount, denom, memo, sequenceNumber) ⇒ <code>Object</code>
+Send SendTransaction.
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - privateKey  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
 
-| Param | Type |
-| --- | --- |
-| keystore | <code>string</code> \| <code>object</code> | 
-| password | <code>string</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| to | <code>String</code> |  | To Address |
+| amount | <code>Number</code> |  | Coin Quantity |
+| denom | <code>String</code> |  | Coin Name |
+| memo | <code>String</code> |  |  |
+| sequenceNumber | <code>Number</code> | <code></code> |  |
 
-<a name="module_crypto.generateMnemonic"></a>
+<a name="module_client.OKEXChainClient+sendCancelOrderTransaction"></a>
 
-### crypto.generateMnemonic ⇒ <code>string</code>
-Generate mnemonic.
+#### okexChainClient.sendCancelOrderTransaction(orderId, memo, sequenceNumber) ⇒ <code>Object</code>
+Send CancelOrderTransaction.
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-<a name="module_crypto.validateMnemonic"></a>
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
 
-### crypto.validateMnemonic ⇒ <code>bool</code>
-Validate mnemonic.
+| Param | Type | Default |
+| --- | --- | --- |
+| orderId | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+<a name="module_client.OKEXChainClient+sendPlaceOrderTransaction"></a>
 
-| Param | Type |
-| --- | --- |
-| mnemonic. | <code>string</code> | 
+#### okexChainClient.sendPlaceOrderTransaction(product, side, price, quantity, memo, sequence) ⇒ <code>Object</code>
+Send PlaceOrderTransaction.
 
-<a name="module_crypto.getPrivateKeyFromMnemonic"></a>
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
 
-### crypto.getPrivateKeyFromMnemonic ⇒ <code>string</code>
-Get private key from mnemonic.
+| Param | Type | Default |
+| --- | --- | --- |
+| product | <code>String</code> |  | 
+| side | <code>String</code> |  | 
+| price | <code>Number</code> |  | 
+| quantity | <code>Number</code> |  | 
+| memo | <code>Number</code> |  | 
+| sequence | <code>Number</code> | <code></code> | 
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - hexstring  
+<a name="module_client.OKEXChainClient+buildTransaction"></a>
+
+#### okexChainClient.buildTransaction(msg, signMsg, memo, fee, sequenceNumber) ⇒ <code>Transaction</code>
+Build Transaction for sending to okexchain.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Transaction</code> - Transaction object  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| msg | <code>Object</code> |  | 
+| signMsg | <code>Object</code> |  | 
+| memo | <code>String</code> |  | 
+| fee | <code>String</code> | <code></code> | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendTransaction"></a>
+
+#### okexChainClient.sendTransaction(tx, mode) ⇒ <code>Object</code>
+send transaction to OKEXChain.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response (success or fail)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| mnemonic | <code>string</code> |  |
-| cointype, | <code>string</code> | default 60 |
+| tx | <code>signedTx</code> | signed Transaction object |
+| mode | <code>Boolean</code> | use synchronous mode, optional |
 
-<a name="module_crypto.sha256Ripemd160"></a>
+<a name="module_client.OKEXChainClient+getAccount"></a>
 
-### crypto.sha256Ripemd160 ⇒ <code>string</code>
-Just like ripemd160(sha256(hex))
+#### okexChainClient.getAccount(address) ⇒ <code>Object</code>
+get account
 
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - hash  
-
-| Param | Type |
-| --- | --- |
-| hex | <code>string</code> | 
-
-<a name="module_crypto.sha256"></a>
-
-### crypto.sha256 ⇒ <code>string</code>
-SHA256.
-
-**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>string</code> - hash  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - result  
 
 | Param | Type |
 | --- | --- |
-| hex | <code>string</code> | 
+| address | <code>String</code> | 
 
-<a name="module_crypto..isBN"></a>
+<a name="module_client.OKEXChainClient+getBalance"></a>
 
-### crypto~isBN(object) ⇒ <code>Boolean</code>
-Returns true if object is BN, otherwise false
+#### okexChainClient.getBalance(address) ⇒ <code>Object</code>
+get balances from OKEXChain
 
-**Kind**: inner method of [<code>crypto</code>](#module_crypto)  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - result  
 
 | Param | Type |
 | --- | --- |
-| object | <code>Object</code> | 
+| address | <code>String</code> | 
 
-<a name="module_crypto..isHexStrict"></a>
+<a name="module_client.OKEXChainClient+getBalanceFromAccountInfo"></a>
 
-### crypto~isHexStrict(hex) ⇒ <code>Boolean</code>
-Check if string is HEX, requires a 0x in front
+#### okexChainClient.getBalanceFromAccountInfo(accountInfo) ⇒ <code>Object</code>
+get balances from accountInfo Object
 
-**Kind**: inner method of [<code>crypto</code>](#module_crypto)  
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - result  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| hex | <code>String</code> | to be checked |
+| accountInfo | <code>Object</code> | optional address |
 
-<a name="module_crypto..sha3"></a>
+<a name="module_client.OKEXChainClient+getSequenceNumber"></a>
 
-### crypto~sha3() ⇒ <code>String</code>
-Hashes values to a sha3 hash using keccak 256
+#### okexChainClient.getSequenceNumber(address) ⇒ <code>Number</code>
+get SequenceNumber from OKEXChain
 
-To hash a HEX string the hex must have 0x in front.
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Number</code> - sequenceNumber  
 
-**Kind**: inner method of [<code>crypto</code>](#module_crypto)  
-**Returns**: <code>String</code> - the sha3 string  
-<a name="module_crypto..toChecksumAddress"></a>
+| Param | Type |
+| --- | --- |
+| address | <code>String</code> | 
 
-### crypto~toChecksumAddress(address) ⇒ <code>String</code>
-Converts to a checksum address
+<a name="module_client.OKEXChainClient+getSequenceNumberFromAccountInfo"></a>
 
-**Kind**: inner method of [<code>crypto</code>](#module_crypto)  
+#### okexChainClient.getSequenceNumberFromAccountInfo(accountInfo) ⇒ <code>Number</code>
+get SequenceNumber from accountInfo Object
 
-| Param | Type | Description |
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Number</code> - sequenceNumber  
+
+| Param | Type |
+| --- | --- |
+| accountInfo | <code>String</code> | 
+
+<a name="module_client.OKEXChainClient+getAccountNumberFromAccountInfo"></a>
+
+#### okexChainClient.getAccountNumberFromAccountInfo(accountInfo) ⇒ <code>Number</code>
+get accountNumber from accountInfo Object
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Number</code> - accountNumber  
+
+| Param | Type |
+| --- | --- |
+| accountInfo | <code>String</code> | 
+
+<a name="module_client.OKEXChainClient+sendTokenIssueTransaction"></a>
+
+#### okexChainClient.sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable, description, memo, sequenceNumber) ⇒ <code>Object</code>
+Send TokenIssueTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
 | --- | --- | --- |
-| address | <code>String</code> | the given HEX address |
+| symbol | <code>String</code> |  | 
+| whole_name | <code>String</code> |  | 
+| total_supply | <code>String</code> |  | 
+| mintable | <code>Boolean</code> | <code>false</code> | 
+| description | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendTokenBurnTransaction"></a>
+
+#### okexChainClient.sendTokenBurnTransaction(token, amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send TokenBurnTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| token | <code>String</code> |  | 
+| amount | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendTokenMintTransaction"></a>
+
+#### okexChainClient.sendTokenMintTransaction(token, amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send TokenMintTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| token | <code>String</code> |  | 
+| amount | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendRegisterDexOperatorTransaction"></a>
+
+#### okexChainClient.sendRegisterDexOperatorTransaction(website, handling_fee_address, memo, sequenceNumber) ⇒ <code>Object</code>
+Send RegisterDexOperatorTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| website | <code>String</code> |  | 
+| handling_fee_address | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendListTokenPairTransaction"></a>
+
+#### okexChainClient.sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo, sequenceNumber) ⇒ <code>Object</code>
+Send ListTokenPairTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| base_asset | <code>String</code> |  | 
+| quote_asset | <code>String</code> |  | 
+| init_price | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendAddProductDepositTransaction"></a>
+
+#### okexChainClient.sendAddProductDepositTransaction(amount, product, memo, sequenceNumber) ⇒ <code>Object</code>
+Send AddProductDepositTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| amount | <code>String</code> |  | 
+| product | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendWithdrawProductDepositTransaction"></a>
+
+#### okexChainClient.sendWithdrawProductDepositTransaction(amount, product, memo, sequenceNumber) ⇒ <code>Object</code>
+Send WithdrawProductDepositTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| amount | <code>String</code> |  | 
+| product | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendAddLiquidityTransaction"></a>
+
+#### okexChainClient.sendAddLiquidityTransaction(min_liquidity, max_base_amount, base_token, quote_amount, quote_token, deadline, memo, sequenceNumber) ⇒ <code>Object</code>
+Send AddLiquidityTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| min_liquidity | <code>Number</code> |  | 
+| max_base_amount | <code>Number</code> |  | 
+| base_token | <code>String</code> |  | 
+| quote_amount | <code>Number</code> |  | 
+| quote_token | <code>String</code> |  | 
+| deadline | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendRemoveLiquidityTransaction"></a>
+
+#### okexChainClient.sendRemoveLiquidityTransaction(liquidity, min_base_amount, base_token, min_quote_amount, quote_token, deadline, memo, sequenceNumber) ⇒ <code>Object</code>
+Send RemoveLiquidityTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| liquidity | <code>Number</code> |  | 
+| min_base_amount | <code>Number</code> |  | 
+| base_token | <code>String</code> |  | 
+| min_quote_amount | <code>Number</code> |  | 
+| quote_token | <code>String</code> |  | 
+| deadline | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendCreateExchangeTransaction"></a>
+
+#### okexChainClient.sendCreateExchangeTransaction(Token0Name, Token1Name, memo, sequenceNumber) ⇒ <code>Object</code>
+Send CreateExchangeTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| Token0Name | <code>String</code> |  | 
+| Token1Name | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendSwapTokenTransaction"></a>
+
+#### okexChainClient.sendSwapTokenTransaction(sold_token_amount, sold_token, min_bought_token_amount, bought_token, deadline, recipient, memo, sequenceNumber) ⇒ <code>Object</code>
+Send SwapTokenTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| sold_token_amount | <code>Number</code> |  | 
+| sold_token | <code>String</code> |  | 
+| min_bought_token_amount | <code>Number</code> |  | 
+| bought_token | <code>String</code> |  | 
+| deadline | <code>String</code> |  | 
+| recipient | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmCreatePoolTransaction"></a>
+
+#### okexChainClient.sendFarmCreatePoolTransaction(pool_name, min_lock_denom, min_lock_amount, yield_symbol, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmCreatePoolTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| min_lock_denom | <code>String</code> |  | 
+| min_lock_amount | <code>Number</code> |  | 
+| yield_symbol | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmDestroyPoolTransaction"></a>
+
+#### okexChainClient.sendFarmDestroyPoolTransaction(pool_name, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmDestroyPoolTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmProvideTransaction"></a>
+
+#### okexChainClient.sendFarmProvideTransaction(pool_name, provide_denom, provide_amount, yielded_per_block, start_height, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmProvideTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| provide_denom | <code>String</code> |  | 
+| provide_amount | <code>Number</code> |  | 
+| yielded_per_block | <code>Number</code> |  | 
+| start_height | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmLockTransaction"></a>
+
+#### okexChainClient.sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmLockTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| lock_denom | <code>String</code> |  | 
+| lock_amount | <code>Number</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmUnLockTransaction"></a>
+
+#### okexChainClient.sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmUnLockTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| unlock_denom | <code>String</code> |  | 
+| unlock_amount | <code>Number</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
+
+<a name="module_client.OKEXChainClient+sendFarmClaimTransaction"></a>
+
+#### okexChainClient.sendFarmClaimTransaction(pool_name, memo, sequenceNumber) ⇒ <code>Object</code>
+Send FarmClaimTransaction.
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| pool_name | <code>String</code> |  | 
+| memo | <code>String</code> |  | 
+| sequenceNumber | <code>Number</code> | <code></code> | 
 

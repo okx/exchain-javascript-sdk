@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "build": "rm -rf lib && npx babel src -d lib",
-    "build:docsclient": "npx jsdoc-to-markdown -f src/*.js > docs/okexchain-jssdk-doc-client.md",
+    "build:docsclient": "npx jsdoc-to-markdown -f src/client.js > docs/okexchain-jssdk-doc-client.md",
     "build:docscrypto": "npx jsdoc-to-markdown -f src/crypto/*.js > docs/okexchain-jssdk-doc-crypto.md",
     "prepublishOnly": "npm run build",
     "lint": "eslint --fix src __tests__",
