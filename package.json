@@ -1,14 +1,16 @@
 {
   "name": "@okexchain/javascript-sdk",
-  "version": "0.0.29",
+  "version": "0.0.31",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "build": "rm -rf lib && npx babel src -d lib",
-    "build:docs": "npx jsdoc-to-markdown -f src/**/*.js > docs/okexchain-jssdk-doc.md",
+    "build:docsclient": "npx jsdoc-to-markdown -f src/client.js > docs/okexchain-jssdk-doc-client.md",
+    "build:docscrypto": "npx jsdoc-to-markdown -f src/crypto/*.js > docs/okexchain-jssdk-doc-crypto.md",
     "prepublishOnly": "npm run build",
-    "lint": "eslint --fix src __tests__"
+    "lint": "eslint --fix src __tests__",
+    "sdk": "webpack-dev-server --config build/webpack.config.sdk.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -22,6 +24,7 @@
     "camelcase": "^5.3.1",
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^3.1.9-1",
+    "eth-lib": "^0.1.29",
     "events": "^3.0.0",
     "is_js": "^0.9.0",
     "keccak": "^3.0.1",
@@ -53,7 +56,6 @@
     "buffer": "^5.2.1",
     "cross-env": "^5.2.0",
     "eslint": "^5.11.1",
-    "eth-lib": "^0.1.29",
     "http-server": "^0.11.1",
     "husky": "^3.0.0",
     "jest": "^23.6.0",
