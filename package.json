@@ -13,6 +13,7 @@
     "sdk": "webpack-dev-server --config build/webpack.config.sdk.js"
   },
   "dependencies": {
+    "@walletconnect/client": "1.3.3",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "base32-encode": "^1.1.0",
