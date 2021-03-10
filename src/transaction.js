@@ -1,5 +1,5 @@
 import * as crypto from "./crypto/"
-
+import * as wallet from "./wallet"
 
 /**
  * Transaction
@@ -63,6 +63,33 @@ class Transaction {
     }
 
     this.signatures = signatures;
+
+    return this
+  }
+
+  /**
+   * @param {Object} msg
+   * @return {Transaction}
+   **/
+  async signByWallet(msg) {
+
+    const signMsg = {
+      to: '',
+      symbol: 'OKT',
+      memo: this.memo,
+      // contractAddress:'',
+      decimalNum: '0',
+      accountNumber:this.account_number.toString(),
+      sequenceNumber:this.sequence.toString(),
+      value: '0',
+      gasLimit: this.fee.gas,
+      gasPrice: this.fee.amount[0].amount,
+      data: JSON.stringify(msg)
+    }
+
+    console.log("signmsg: ",JSON.stringify(signMsg))
+
+    this.signatures = await wallet.sign(signMsg);
 
     return this
   }

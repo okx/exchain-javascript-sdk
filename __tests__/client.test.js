@@ -4,11 +4,14 @@ import * as crypto from "../src/crypto"
 
 
 const mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
-const privateKey = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
-const fromAddress = "okexchain1pt7xrmxul7sx54ml44lvv403r06clrdkgmvr9g"
-const serverUrl = "http://localhost:8545"
+const privateKey_996 = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
+const privateKey = "828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997"
+const from_996 = "okexchain1pt7xrmxul7sx54ml44lvv403r06clrdkgmvr9g"
+const from = "okexchain1ya7dn2rr8nx07tx9ksq8gvz5utvarrh03cen3l"
+const serverUrl = "https://exchaintest.okexcn.com"
+// const serverUrl = "https://exchaintest.okexcn.com"
 const userAddress = "okexchain1jjvpmgwwgs99nhlje3aag0lackunqgj7xnrnwe"
-const chainId = "okexchain-1" // -testnet1
+const chainId = "okexchain-65" // -testnet1
 const baseCoin = "okt"
 const testCoin = "xxb-781"
 const testProduct = testCoin + "_" + baseCoin
@@ -21,11 +24,14 @@ describe("OKEXChainClient test", async () => {
 
   it("get balance", async () => {
     const client = new OKEXChainClient(serverUrl, {
-      chainId: chainId
+      chainId: chainId,
+      relativePath: "/okexchain-test/v1",
+      isMainnet: false
     })
-    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, '60')
     await client.setAccountInfo(privateKey)
-    const res = await client.getBalance(fromAddress)
+    const res = await client.getBalance(from)
+    console.log(res)
     expect(res.length).toBeGreaterThanOrEqual(0)
   })
 

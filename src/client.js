@@ -7,6 +7,7 @@
 import * as crypto from "./crypto"
 import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
+import * as wallet from './wallet'
 
 const defaultChainId = "okexchain-66"
 const defaultRelativePath = "/okexchain/v1"
@@ -107,6 +108,12 @@ export class OKEXChainClient {
      * @return {OKEXChainClient}
      */
     async setAccountInfo(privateKey) {
+        if(!privateKey) {
+            const address = await wallet.getAddress();
+            if (!address) throw new Error("invalid privateKey: " + privateKey)
+            await this.setAccountInfoByWallet(address);
+            return this;
+        }
         if (privateKey !== this.privateKey) {
             const address = crypto.getAddressFromPrivateKey(privateKey, bech32Head)
             if (!address) throw new Error("invalid privateKey: " + privateKey)
@@ -119,6 +126,17 @@ export class OKEXChainClient {
         return this
     }
 
+    /**
+     * @return {OKEXChainClient}
+     */
+    async setAccountInfoByWallet(address) {
+        if (!address) throw new Error("invalid wallet connect address: " + address);
+        if (address === this.address) return this
+        this.address = address
+        const data = await this.getAccount(address)
+        this.account_number = this.getAccountNumberFromAccountInfo(data)
+        return this
+    }
 
     /**
      * Send SendTransaction.
@@ -283,7 +301,7 @@ export class OKEXChainClient {
             return await tx.sign(this.signer, signMsg, this.address);
         }
         else {
-            return tx.sign(this.privateKey, signMsg)
+            return this.privateKey ? tx.sign(this.privateKey, signMsg) : tx.signByWallet(signMsg)
         }
     }
 

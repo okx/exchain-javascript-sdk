@@ -8,6 +8,8 @@
         * [.decodeAddressToBuffer](#module_crypto.decodeAddressToBuffer)
         * [.validateAddress](#module_crypto.validateAddress) ⇒ <code>boolean</code>
         * [.encodeAddressToBech32](#module_crypto.encodeAddressToBech32) ⇒ <code>string</code>
+        * [.convertBech32ToHex](#module_crypto.convertBech32ToHex) ⇒ <code>String</code>
+        * [.convertHexToBech32](#module_crypto.convertHexToBech32) ⇒ <code>string</code>
         * [.generatePrivateKey](#module_crypto.generatePrivateKey) ⇒ <code>string</code>
         * [.getPubKeyFromHex](#module_crypto.getPubKeyFromHex) ⇒ <code>Elliptic.PublicKey</code>
         * [.encodePubKeyToCompressedBuffer](#module_crypto.encodePubKeyToCompressedBuffer) ⇒ <code>Buffer</code>
@@ -75,6 +77,28 @@ Encodes address from hex to bech32 format.
 | --- | --- | --- |
 | hexAddr | <code>string</code> | address in hex string |
 | prefix | <code>string</code> | address prefix |
+
+<a name="module_crypto.convertBech32ToHex"></a>
+
+### crypto.convertBech32ToHex ⇒ <code>String</code>
+covert okexchain address to 0x address
+
+**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+
+| Param |
+| --- |
+| bech32Address | 
+
+<a name="module_crypto.convertHexToBech32"></a>
+
+### crypto.convertHexToBech32 ⇒ <code>string</code>
+covert 0x address to okexchain address
+
+**Kind**: static constant of [<code>crypto</code>](#module_crypto)  
+
+| Param |
+| --- |
+| hexAddress | 
 
 <a name="module_crypto.generatePrivateKey"></a>
 
