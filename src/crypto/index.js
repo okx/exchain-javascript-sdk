@@ -77,11 +77,21 @@ export const encodeAddressToBech32 = (hexAddr, prefix = "okexchain") => {
 function buf2hex(buffer) { // buffer is an ArrayBuffer
   return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
+
+/**
+ * covert okexchain address to 0x address
+ * @param bech32Address
+ * @returns {String}
+ */
 export const convertBech32ToHex = (bech32Address) => {
   const address = decodeAddressToBuffer(bech32Address)
   return toChecksumAddress("0x"+buf2hex(address))
 }
-
+/**
+ * covert 0x address to okexchain address
+ * @param hexAddress
+ * @returns {string}
+ */
 export const convertHexToBech32 = (hexAddress) => {
   return encodeAddressToBech32(hexAddress.toLowerCase())
 }
