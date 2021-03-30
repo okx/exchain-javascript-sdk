@@ -81,7 +81,7 @@ Encodes address from hex to bech32 format.
 <a name="module_crypto.convertBech32ToHex"></a>
 
 ### crypto.convertBech32ToHex ⇒ <code>String</code>
-covert okexchain address to 0x address
+covert ex address to 0x address
 
 **Kind**: static constant of [<code>crypto</code>](#module_crypto)  
 
@@ -92,7 +92,7 @@ covert okexchain address to 0x address
 <a name="module_crypto.convertHexToBech32"></a>
 
 ### crypto.convertHexToBech32 ⇒ <code>string</code>
-covert 0x address to okexchain address
+covert 0x address to ex address
 
 **Kind**: static constant of [<code>crypto</code>](#module_crypto)  
 

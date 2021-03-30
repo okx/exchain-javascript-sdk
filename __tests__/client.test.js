@@ -6,11 +6,11 @@ import * as crypto from "../src/crypto"
 const mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
 const privateKey_996 = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
 const privateKey = "828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997"
-const from_996 = "okexchain1pt7xrmxul7sx54ml44lvv403r06clrdkgmvr9g"
-const from = "okexchain1ya7dn2rr8nx07tx9ksq8gvz5utvarrh03cen3l"
+const from_996 = "ex1jjvpmgwwgs99nhlje3aag0lackunqgj7pcgnd4"
+const from = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
 const serverUrl = "https://exchaintest.okexcn.com"
 // const serverUrl = "https://exchaintest.okexcn.com"
-const userAddress = "okexchain1jjvpmgwwgs99nhlje3aag0lackunqgj7xnrnwe"
+const userAddress = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
 const chainId = "okexchain-65" // -testnet1
 const baseCoin = "okt"
 const testCoin = "xxb-781"
@@ -120,7 +120,7 @@ describe("OKEXChainClient test", async () => {
   it("send sendRegisterDexOperatorTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendRegisterDexOperatorTransaction("http://test.json", "okexchain14zg88reaad4czrcnf93esftwe44gpev9cqhkny", "add deposit", data.sequence)
+    const res = await data.okclient.sendRegisterDexOperatorTransaction("http://test.json", "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn", "add deposit", data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })

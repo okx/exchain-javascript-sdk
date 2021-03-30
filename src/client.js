@@ -11,7 +11,7 @@ import * as wallet from './wallet'
 
 const defaultChainId = "okexchain-66"
 const defaultRelativePath = "/okexchain/v1"
-const bech32Head = "okexchain"
+const bech32Head = "ex"
 const mode = "block"
 const nativeDenom = "okt"
 const defaultTestnetFee = {
