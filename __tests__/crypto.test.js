@@ -8,19 +8,19 @@ describe("crypto", () => {
 
   it("getAddressFromPrivateKey", () => {
     const address = crypto.getAddressFromPrivateKey(privateKey)
-    expect(address).toBe("okexchain1jjvpmgwwgs99nhlje3aag0lackunqgj7xnrnwe")
-    expect(address.length).toBe(48)
+    expect(address).toBe("ex1jjvpmgwwgs99nhlje3aag0lackunqgj7pcgnd4")
+    expect(address.length).toBe(41)
   })
 
   it("getAddressFromPubKey", () => {
     const publicKey = crypto.getPubKeyHexFromPrivateKey(privateKey)
     const address = crypto.getAddressFromPubKey(publicKey)
-    expect(address).toBe("okexchain1jjvpmgwwgs99nhlje3aag0lackunqgj7xnrnwe")
+    expect(address).toBe("ex1jjvpmgwwgs99nhlje3aag0lackunqgj7pcgnd4")
   })
 
   it("getPrivateKeyFromKeyStore", () => {
-    const keyStore = crypto.generateKeyStore(privateKey, "okexchain")
-    const pk = crypto.getPrivateKeyFromKeyStore(keyStore, "okexchain")
+    const keyStore = crypto.generateKeyStore(privateKey, "ex")
+    const pk = crypto.getPrivateKeyFromKeyStore(keyStore, "ex")
     expect(pk).toBe(privateKey)
   })
 
@@ -41,9 +41,10 @@ describe("crypto", () => {
   })
 
   it("decodeAddressToBuffer", ()=>{
-    let address = "okexchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptddw77gw"
+    let address = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
     const decod = crypto.decodeAddressToBuffer(address)
-    expect(decod.toString("hex")).toBe("47b119b3b8f6e489ab65d83ff47567739b1e856d")
+    console.log(decod.toString("hex"));
+    expect(decod.toString("hex")).toBe("277cd9a8633cccff2cc5b400743054e2d9d18eef")
   })
 
   it("sign", () => {
@@ -60,9 +61,11 @@ describe("crypto", () => {
   })
 
   it("bech32 and hex", () => {
-    let bech32Address = "okexchain1g7c3nvac7mjgn2m9mqllgat8wwd3aptddw77gw"
+    let bech32Address = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
     let hexAddress = crypto.convertBech32ToHex(bech32Address)
     console.log('hexAddress', hexAddress);
+
+    // let hexAddress = "0x277CD9a8633ccCFF2Cc5B400743054e2d9d18eEf"
     let newBech32Address = crypto.convertHexToBech32(hexAddress)
     console.log('newBech32Address', newBech32Address)
     expect(bech32Address).toBe(newBech32Address)

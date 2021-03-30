@@ -52,7 +52,7 @@ export const decodeAddressToBuffer = (addr) => {
 export const validateAddress = (addr) => {
   try {
     const decodeAddress = bech32.decode(addr)
-    if(decodeAddress.prefix === "okexchain") {
+    if(decodeAddress.prefix === "ex") {
       return true
     }
 
@@ -68,7 +68,7 @@ export const validateAddress = (addr) => {
  * @param {string} prefix address prefix
  * @return {string} address with bech32 format
  */
-export const encodeAddressToBech32 = (hexAddr, prefix = "okexchain") => {
+export const encodeAddressToBech32 = (hexAddr, prefix = "ex") => {
   hexAddr = hexAddr.slice(0, 2) === '0x' ? hexAddr.slice(2) : hexAddr
   const words = bech32.toWords(Buffer.from(hexAddr, "hex"))
   return bech32.encode(prefix, words)
@@ -79,7 +79,7 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 }
 
 /**
- * covert okexchain address to 0x address
+ * covert ex address to 0x address
  * @param bech32Address
  * @returns {String}
  */
@@ -88,7 +88,7 @@ export const convertBech32ToHex = (bech32Address) => {
   return toChecksumAddress("0x"+buf2hex(address))
 }
 /**
- * covert 0x address to okexchain address
+ * covert 0x address to ex address
  * @param hexAddress
  * @returns {string}
  */

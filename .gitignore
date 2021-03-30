@@ -8,3 +8,5 @@
 tsconfig.json
 .history/
 /dist
+/bulid
+/lib

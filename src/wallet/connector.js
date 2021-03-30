@@ -10,7 +10,7 @@ const GET_SIGN = {
   method: 'okt_signTransaction'
 };
 
-const OKEXCHAIN = 'okexchain';
+const EXCHAIN = 'ex';
 
 // const DURING = 5000;
 
@@ -48,7 +48,7 @@ class Connector {
   onDisconnect() {
     this.killSession();
   }
-  
+
   async getAccounts() {
     const walletConnector = this.walletConnector;
     if(!walletConnector) return '';
@@ -65,7 +65,7 @@ class Connector {
       console.log('get address params: ' + JSON.stringify(params));
       walletConnector.sendCustomRequest(params).then((res) => {
         const okexchainAccount = res.find((account) => {
-          return account.address.startsWith(OKEXCHAIN);
+          return account.address.startsWith(EXCHAIN);
         });
         if (okexchainAccount) {
           address = okexchainAccount.address;
@@ -172,7 +172,7 @@ class Connector {
   doCallback(type,params) {
     if(typeof this.callback[type] === 'function' )this.callback[type](params);
   }
-  
+
   async getSession(callback) {
     this.setCallback(callback);
     let session = '';
