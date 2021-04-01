@@ -81,19 +81,20 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 /**
  * covert ex address to 0x address
  * @param bech32Address
- * @returns {String}
+ * @returns {Array}
  */
 export const convertBech32ToHex = (bech32Address) => {
   const address = decodeAddressToBuffer(bech32Address)
-  return toChecksumAddress("0x"+buf2hex(address))
+  const hexAddress = toChecksumAddress("0x"+buf2hex(address))
+  return [hexAddress, convertHexToBech32(hexAddress)[1]]
 }
 /**
  * covert 0x address to ex address
  * @param hexAddress
- * @returns {string}
+ * @returns {Array}
  */
 export const convertHexToBech32 = (hexAddress) => {
-  return encodeAddressToBech32(hexAddress.toLowerCase())
+  return [encodeAddressToBech32(hexAddress.toLowerCase()), encodeAddressToBech32(hexAddress.toLowerCase(), 'okexchain')]
 }
 
 

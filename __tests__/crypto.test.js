@@ -60,15 +60,26 @@ describe("crypto", () => {
     expect(crypto.validateSig(sig, msg, publicKey)).toBeTruthy()
   })
 
-  it("bech32 and hex", () => {
+  it("convertBech32ToHex", () => {
     let bech32Address = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
-    let hexAddress = crypto.convertBech32ToHex(bech32Address)
-    console.log('hexAddress', hexAddress);
+    let newHexAddress = crypto.convertBech32ToHex(bech32Address)
+    console.log('newHexAddress', newHexAddress);
 
-    // let hexAddress = "0x277CD9a8633ccCFF2Cc5B400743054e2d9d18eEf"
+    let hexAddress = "0x277CD9a8633ccCFF2Cc5B400743054e2d9d18eEf"
+    let okexchainAddress = "okexchain1ya7dn2rr8nx07tx9ksq8gvz5utvarrh03cen3l"
+    expect(hexAddress).toBe(newHexAddress[0])
+    expect(okexchainAddress).toBe(newHexAddress[1])
+  })
+
+  it("convertHexToBech32", () => {
+    let hexAddress = "0x277CD9a8633ccCFF2Cc5B400743054e2d9d18eEf"
     let newBech32Address = crypto.convertHexToBech32(hexAddress)
     console.log('newBech32Address', newBech32Address)
-    expect(bech32Address).toBe(newBech32Address)
+
+    let exAddress = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
+    let okexchainAddress = "okexchain1ya7dn2rr8nx07tx9ksq8gvz5utvarrh03cen3l"
+    expect(exAddress).toBe(newBech32Address[0])
+    expect(okexchainAddress).toBe(newBech32Address[1])
   })
 
 
