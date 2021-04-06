@@ -86,7 +86,7 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 export const convertBech32ToHex = (bech32Address) => {
   const address = decodeAddressToBuffer(bech32Address)
   const hexAddress = toChecksumAddress("0x"+buf2hex(address))
-  return [hexAddress, convertHexToBech32(hexAddress)[1]]
+  return [hexAddress, encodeAddressToBech32(hexAddress.toLowerCase(), 'okexchain')]
 }
 /**
  * covert 0x address to ex address
