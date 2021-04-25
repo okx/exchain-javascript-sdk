@@ -161,7 +161,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/token/MsgTransfer",
+            type: "exchain/token/MsgTransfer",
             value: {
                 amount: [coin],
                 from_address: this.address,
@@ -195,7 +195,7 @@ export class OKEXChainClient {
         var signMsg = []
 
         msg.push({
-            type: "okexchain/order/MsgCancel",
+            type: "exchain/order/MsgCancel",
             value: {
                 order_ids: orderIdList,
                 sender: this.address,
@@ -255,7 +255,7 @@ export class OKEXChainClient {
 
     async sendPlaceOrdersTransaction(order_items, memo = "", sequence = null) {
         const placeOrderMsg = [{
-            type: "okexchain/order/MsgNew",
+            type: "exchain/order/MsgNew",
             value: {
                 order_items: order_items,
                 sender: this.address,
@@ -411,7 +411,7 @@ export class OKEXChainClient {
     async sendTokenIssueTransaction(symbol, whole_name, total_supply, mintable = false, description = '', memo = '', sequenceNumber = null) {
 
         const msg = [{
-            type: "okexchain/token/MsgIssue",
+            type: "exchain/token/MsgIssue",
             value: {
                 description: description,
                 mintable: mintable,
@@ -439,7 +439,7 @@ export class OKEXChainClient {
     async sendTokenBurnTransaction(token, amount, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okexchain/token/MsgBurn",
+            type: "exchain/token/MsgBurn",
             value: {
                 amount: {
                     amount: this.formatNumber(amount),
@@ -465,7 +465,7 @@ export class OKEXChainClient {
     async sendTokenMintTransaction(token, amount, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okexchain/token/MsgMint",
+            type: "exchain/token/MsgMint",
             value: {
                 amount: {
                     amount: this.formatNumber(amount),
@@ -495,7 +495,7 @@ export class OKEXChainClient {
             throw new Error("invalid handling_fee_address")
         }
         const msg = [{
-            type: "okexchain/dex/CreateOperator",
+            type: "exchain/dex/CreateOperator",
             value: {
                 handling_fee_address: handling_fee_address,
                 owner: this.address,
@@ -521,7 +521,7 @@ export class OKEXChainClient {
     async sendListTokenPairTransaction(base_asset, quote_asset, init_price, memo = "", sequenceNumber = null) {
 
         const msg = [{
-            type: "okexchain/dex/MsgList",
+            type: "exchain/dex/MsgList",
             value: {
                 init_price: this.formatNumber(init_price),
                 list_asset: base_asset,
@@ -552,7 +552,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/dex/MsgDeposit",
+            type: "exchain/dex/MsgDeposit",
             value: {
                 amount: coin,
                 depositor: this.address,
@@ -583,7 +583,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/dex/MsgWithdraw",
+            type: "exchain/dex/MsgWithdraw",
             value: {
                 amount: coin,
                 depositor: this.address,
@@ -621,7 +621,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/ammswap/MsgAddLiquidity",
+            type: "exchain/ammswap/MsgAddLiquidity",
             value: {
                 deadline: deadline,
                 max_base_amount: base_coin,
@@ -660,7 +660,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/ammswap/MsgRemoveLiquidity",
+            type: "exchain/ammswap/MsgRemoveLiquidity",
             value: {
                 deadline: deadline,
                 liquidity: this.formatNumber(liquidity),
@@ -686,7 +686,7 @@ export class OKEXChainClient {
     async sendCreateExchangeTransaction(Token0Name, Token1Name, memo = '', sequenceNumber = null) {
 
         const msg = [{
-            type: "okexchain/ammswap/MsgCreateExchange",
+            type: "exchain/ammswap/MsgCreateExchange",
             value: {
                 sender: this.address,
                 token0_name: Token0Name,
@@ -723,7 +723,7 @@ export class OKEXChainClient {
         }
 
         const msg = [{
-            type: "okexchain/ammswap/MsgSwapToken",
+            type: "exchain/ammswap/MsgSwapToken",
             value: {
                 deadline: deadline,
                 min_bought_token_amount: bought_coin,
@@ -754,7 +754,7 @@ export class OKEXChainClient {
             denom: min_lock_denom,
         }
         const msg = [{
-            type: "okexchain/farm/MsgCreatePool",
+            type: "exchain/farm/MsgCreatePool",
             value: {
                 min_lock_amount: min_lock_coin,
                 owner: this.address,
@@ -777,7 +777,7 @@ export class OKEXChainClient {
      */
     async sendFarmDestroyPoolTransaction(pool_name, memo = '', sequenceNumber = null) {
         const msg = [{
-            type: "okexchain/farm/MsgDestroyPool",
+            type: "exchain/farm/MsgDestroyPool",
             value: {
                 owner: this.address,
                 pool_name: pool_name,
@@ -806,7 +806,7 @@ export class OKEXChainClient {
             denom: provide_denom,
         }
         const msg = [{
-            type: "okexchain/farm/MsgProvide",
+            type: "exchain/farm/MsgProvide",
             value: {
                 address: this.address,
                 amount: provide_coin,
@@ -836,7 +836,7 @@ export class OKEXChainClient {
             denom: lock_denom,
         }
         const msg = [{
-            type: "okexchain/farm/MsgLock",
+            type: "exchain/farm/MsgLock",
             value: {
                 address: this.address,
                 amount: amount,
@@ -864,7 +864,7 @@ export class OKEXChainClient {
             denom: unlock_denom,
         }
         const msg = [{
-            type: "okexchain/farm/MsgUnlock",
+            type: "exchain/farm/MsgUnlock",
             value: {
                 address: this.address,
                 amount: amount,
@@ -886,7 +886,7 @@ export class OKEXChainClient {
      */
     async sendFarmClaimTransaction(pool_name, memo = '', sequenceNumber = null) {
         const msg = [{
-            type: "okexchain/farm/MsgClaim",
+            type: "exchain/farm/MsgClaim",
             value: {
                 address: this.address,
                 pool_name: pool_name,
