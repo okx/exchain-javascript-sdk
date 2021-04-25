@@ -11,7 +11,6 @@ import * as wallet from './wallet'
 
 const defaultChainId = "okexchain-66"
 const defaultRelativePath = "/okexchain/v1"
-const bech32Head = "ex"
 const mode = "block"
 const nativeDenom = "okt"
 const defaultTestnetFee = {
@@ -105,9 +104,10 @@ export class OKEXChainClient {
 
     /**
      * @param {string} privateKey
+     * @param {string} prefix
      * @return {OKEXChainClient}
      */
-    async setAccountInfo(privateKey) {
+    async setAccountInfo(privateKey, prefix = "ex") {
         if(!privateKey) {
             const address = await wallet.getAddress();
             if (!address) throw new Error("invalid privateKey: " + privateKey)
@@ -115,7 +115,7 @@ export class OKEXChainClient {
             return this;
         }
         if (privateKey !== this.privateKey) {
-            const address = crypto.getAddressFromPrivateKey(privateKey, bech32Head)
+            const address = crypto.getAddressFromPrivateKey(privateKey, prefix)
             if (!address) throw new Error("invalid privateKey: " + privateKey)
             if (address === this.address) return this
             this.privateKey = privateKey
