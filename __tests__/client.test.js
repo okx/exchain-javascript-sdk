@@ -3,20 +3,24 @@ import * as crypto from "../src/crypto"
 
 
 
-const mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
-const privateKey_996 = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
-const privateKey = "828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997"
-const from_996 = "ex1jjvpmgwwgs99nhlje3aag0lackunqgj7pcgnd4"
-const from = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
-const serverUrl = "https://exchaintest.okexcn.com"
-// const serverUrl = "https://exchaintest.okexcn.com"
-const userAddress = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
-const chainId = "okexchain-65" // -testnet1
+// const mnemonic = "total lottery arena when pudding best candy until army spoil drill pool"
+// const privateKey_996 = "29892b64003fc5c8c89dc795a2ae82aa84353bb4352f28707c2ed32aa1011884"
+// const privateKey = "828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997"
+// const from_996 = "ex1jjvpmgwwgs99nhlje3aag0lackunqgj7pcgnd4"
+// const from = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
+
+const serverUrl = "https://exchaintestrpc.okex.org"
+const toAddress = "ex1ya7dn2rr8nx07tx9ksq8gvz5utvarrh0knjnjn"
+const chainId = "exchain-65"
 const baseCoin = "okt"
 const testCoin = "xxb-781"
 const testProduct = testCoin + "_" + baseCoin
 const testPoolName = "aaa-882_okt"
 
+
+const mnemonic = "bamboo dismiss pitch mass strategy advice example critic vapor series simple kitten"
+const privateKey = "828e61f969a7369f3340b07dd2080740d8445d7f802899ddacf9bc4db8608997"
+const from = "ex1vegcudd5ypa6j025w4tf6hspt0vr27ty5sy3l9"
 
 
 describe("OKEXChainClient test", async () => {
@@ -38,15 +42,18 @@ describe("OKEXChainClient test", async () => {
   it("send sendTransaction", async () => {
     jest.setTimeout(10000)
     const client = new OKEXChainClient(serverUrl, {
-      chainId: chainId
+      chainId: chainId,
+      relativePath: "/okexchain-test/v1",
+      isMainnet: false
     })
-    // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, '996')
     await client.setAccountInfo(privateKey)
     //console.log(client)
     const addr = crypto.getAddressFromPrivateKey(client.privateKey)
     const account = await client.getAccount(addr)
     const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
-    const res = await client.sendSendTransaction(userAddress, "1.00000000", baseCoin, "hello world", sequence)
+    // console.log(account, sequence)
+    const res = await client.sendSendTransaction(toAddress, "1.00000000", baseCoin, "hello world", sequence)
     console.log(JSON.stringify(res))
     // expect(res.status).toBe(200)
   })
@@ -174,7 +181,7 @@ describe("OKEXChainClient test", async () => {
   it("send SwapTokenTransaction", async () => {
     jest.setTimeout(10000)
     const data = await prepareAccount()
-    const res = await data.okclient.sendSwapTokenTransaction("50.00000000", "aa11", "10.00000000", "okt", "1612781334", userAddress, '', data.sequence)
+    const res = await data.okclient.sendSwapTokenTransaction("50.00000000", "aa11", "10.00000000", "okt", "1612781334", toAddress, '', data.sequence)
     console.log(JSON.stringify(res))
     expect(res.status).toBe(200)
   })
