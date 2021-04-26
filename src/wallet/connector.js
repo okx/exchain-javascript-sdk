@@ -10,7 +10,7 @@ const GET_SIGN = {
   method: 'okt_signTransaction'
 };
 
-const EXCHAIN = 'okexchain';
+const EXCHAIN = 'ex';
 
 // const DURING = 5000;
 
