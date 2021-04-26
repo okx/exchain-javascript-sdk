@@ -48,7 +48,7 @@ export class OKEXChainClient {
      * @param {Object} config
      * {
      *     chainId: "exchain-66" (mainnet, default) / "exchain-65" (testnet)
-     *     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)
+     *     relativePath: "/exchain/v1" (mainnet, default) / "/exchain-test/v1" (testnet)
      *     isMainnet: true (mainnet) / false (other, default)
      *     signer: external signer object, Object / null (default)
      * }

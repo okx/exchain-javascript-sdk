@@ -97,6 +97,16 @@ export const convertHexToBech32 = (hexAddress) => {
   return [encodeAddressToBech32(hexAddress.toLowerCase()), encodeAddressToBech32(hexAddress.toLowerCase(), 'okexchain')]
 }
 
+/**
+ * covert okexchain address to ex address
+ * @param bech32Address
+ * @returns {String}
+ */
+export const convertOKExChainAddressToExAddress = (bech32Address) => {
+  const address = decodeAddressToBuffer(bech32Address)
+  const hexAddress = toChecksumAddress("0x"+buf2hex(address))
+  return encodeAddressToBech32(hexAddress.toLowerCase(), 'ex')
+}
 
 /**
  * Returns true if object is BN, otherwise false
