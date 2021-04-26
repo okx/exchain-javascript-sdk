@@ -82,5 +82,12 @@ describe("crypto", () => {
     expect(okexchainAddress).toBe(newBech32Address[1])
   })
 
+  it("convertOKExChainAddressToExAddress", () => {
+    // let bech32Address = "okexchain1ya7dn2rr8nx07tx9ksq8gvz5utvarrh03cen3l"
+    let bech32Address = "okexchain1jj8fggmk296f3adt8c469v8r2w3fkv03whjup2"
+    let newBech32Address = crypto.convertOKExChainAddressToExAddress(bech32Address)
+    console.log('newHexAddress', newBech32Address);
+  })
+
 
 })
