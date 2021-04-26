@@ -9,7 +9,7 @@ import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
 import * as wallet from './wallet'
 
-const defaultChainId = "okexchain-66"
+const defaultChainId = "exchain-66"
 const defaultRelativePath = "/okexchain/v1"
 const mode = "block"
 const nativeDenom = "okt"
@@ -47,7 +47,7 @@ export class OKEXChainClient {
      * @param {string} url
      * @param {Object} config
      * {
-     *     chainId: "okexchain-66" (mainnet, default) / "okexchain-65" (testnet)
+     *     chainId: "exchain-66" (mainnet, default) / "exchain-65" (testnet)
      *     relativePath: "/okexchain/v1" (mainnet, default) / "/okexchain-test/v1" (testnet)
      *     isMainnet: true (mainnet) / false (other, default)
      *     signer: external signer object, Object / null (default)
