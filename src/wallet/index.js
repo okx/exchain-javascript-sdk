@@ -13,9 +13,12 @@ export function killSession() {
 }
 
 export async function getAddress() {
-  let address = connector.address;
+  let address = connector.exAddress;
   try {
-    if(!address) address = await connector.getAccounts();
+    if(!address) {
+      await connector.getAccounts();
+      address = connector.exAddress;
+    }
   } catch {
     console.log('get address fail');
   }
