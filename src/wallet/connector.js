@@ -1,4 +1,5 @@
 import WalletConnect from '@walletconnect/client';
+import * as crypto from "../crypto";
 
 const GET_ACCOUNTS = {
   jsonrpc: '2.0',
@@ -10,9 +11,11 @@ const GET_SIGN = {
   method: 'okt_signTransaction'
 };
 
-const EXCHAIN = 'ex';
+const EXCHAIN = /(^ex)|(^0x)/i;
 
-// const DURING = 5000;
+const ZEROX = /^0x/i;
+
+const DURING = 5000;
 
 class Connector {
 
@@ -39,10 +42,17 @@ class Connector {
       const { accounts } = payload.params[0];
       this.handleConnect(accounts);
       if(!this.address) throw new Error;
-      this.doCallback('success',{address: this.address});
+      this.doCallback('success',{address: this.exAddress});
     } catch {
       this.doCallback('error');
     }
+  }
+
+  get exAddress() {
+    if(ZEROX.test(this.address)) {
+      return crypto.convertHexToBech32(this.address)[0];
+    }
+    return this.address;
   }
 
   onDisconnect() {
@@ -65,7 +75,7 @@ class Connector {
       console.log('get address params: ' + JSON.stringify(params));
       walletConnector.sendCustomRequest(params).then((res) => {
         const okexchainAccount = res.find((account) => {
-          return account.address.startsWith(EXCHAIN);
+          return EXCHAIN.test(account.address);
         });
         if (okexchainAccount) {
           address = okexchainAccount.address;
