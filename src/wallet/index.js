@@ -4,8 +4,8 @@ import connector from './connector';
  * {sessionSuccess,sessionFail,sessionCancel,success,error}
  * @param {*} callbacks 
  */
-export function getSession(callback={}) {
-  return connector.getSession(callback);
+export function getSession(callback={}, storageId) {
+  return connector.getSession(callback, storageId);
 }
 
 export function killSession() {
@@ -27,6 +27,10 @@ export async function getAddress() {
 
 export function sign(signMsg) {
   return connector.sign(signMsg);
+}
+
+export function sign4Token(signMsg) {
+  return connector.sign4Token(signMsg);
 }
 
 

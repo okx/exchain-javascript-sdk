@@ -17,6 +17,8 @@ const ZEROX = /^0x/i;
 
 const DURING = 5000;
 
+const signType = '20';
+
 class Connector {
 
   constructor() {
@@ -63,33 +65,30 @@ class Connector {
     const walletConnector = this.walletConnector;
     if(!walletConnector) return '';
     // this.startTimer();
-    return new Promise((resolve,reject) => {
-      let address = '';
-      // let timer = setTimeout(() => {
-      //   if(!address) {
-      //     console.log('获取address超时，将断开链接');
-      //     this.killSession();
-      //   }
-      // }, DURING);
-      const params = {...GET_ACCOUNTS, id: Date.now()};
-      console.log('get address params: ' + JSON.stringify(params));
-      walletConnector.sendCustomRequest(params).then((res) => {
-        const okexchainAccount = res.find((account) => {
-          return EXCHAIN.test(account.address);
-        });
-        if (okexchainAccount) {
-          address = okexchainAccount.address;
-          this.address = address;
-        }
-        if(!address) throw new Error('get address failed');
-        resolve(this.address);
-      }).catch(err => {
-        // console.log('获取address失败，将断开链接');
-        // this.killSession();
-        reject(err);
-      }).finally(() => {
-        // clearTimeout(timer);
+    let address = '';
+    // let timer = setTimeout(() => {
+    //   if(!address) {
+    //     console.log('获取address超时，将断开链接');
+    //     this.killSession();
+    //   }
+    // }, DURING);
+    const params = {...GET_ACCOUNTS, id: Date.now()};
+    console.log('get address params: ' + JSON.stringify(params));
+    return walletConnector.sendCustomRequest(params).then((res) => {
+      const okexchainAccount = res.find((account) => {
+        return EXCHAIN.test(account.address);
       });
+      if (okexchainAccount) {
+        address = okexchainAccount.address;
+        this.address = address;
+      }
+      if(!address) throw new Error('get address failed');
+      return this.address
+    }).catch(() => {
+      // console.log('获取address失败，将断开链接');
+      // this.killSession();
+    }).finally(() => {
+      // clearTimeout(timer);
     });
   }
 
@@ -148,11 +147,12 @@ class Connector {
     await walletConnector.createSession();
   }
 
-  async walletConnectInit() {
+  async walletConnectInit(storageId) {
     const bridge = 'wss://bridge.walletconnect.org';
     const walletConnector = new WalletConnect({ bridge });
     walletConnector._clientMeta.name = 'ΟKEx DEX';
     walletConnector._clientMeta.url = walletConnector._clientMeta.url.replace(/okex/i,'οkex');
+    if(storageId) walletConnector._sessionStorage.storageId = storageId;
     this.walletConnector = walletConnector;
 
     this.subscribeToEvents();
@@ -183,12 +183,12 @@ class Connector {
     if(typeof this.callback[type] === 'function' )this.callback[type](params);
   }
 
-  async getSession(callback) {
+  async getSession(callback, storageId) {
     this.setCallback(callback);
     let session = '';
     try {
       if(!this.walletConnector || !this.walletConnector.uri) {
-        await this.walletConnectInit();
+        await this.walletConnectInit(storageId);
       }
       session = this.walletConnector.uri;
     } finally {
@@ -201,19 +201,24 @@ class Connector {
     return session;
   }
 
+  sendSignMsg(signMsg) {
+    const params = {...GET_SIGN,params:[signMsg],id:Date.now()};
+    console.log('发送签名数据',JSON.stringify(params));
+    return this.walletConnector.sendCustomRequest(params).catch(() => console.log('签名失败'));
+  }
+
   async sign(signMsg) {
-    return new Promise((resolve,reject) => {
-      const params = {...GET_SIGN,params:[signMsg],id:Date.now()};
-      console.log('发送签名数据',JSON.stringify(params));
-      this.walletConnector.sendCustomRequest(params).then((res) => {
-        res = JSON.parse(res);
-        console.log(res);
-        resolve(res.tx.signatures);
-      }).catch(err => {
-        console.log('签名失败')
-        reject(err);
-      });
+    return this.sendSignMsg(signMsg).then(res => {
+      res = JSON.parse(res);
+      return res.tx.signatures;
     });
+  }
+
+  async sign4Token(signMsg) {
+    signMsg = {...signMsg, signType};
+    return this.sendSignMsg({
+      data: JSON.stringify(signMsg)
+    }).then(res => ({rawTransaction: res}));
   }
 }
 
