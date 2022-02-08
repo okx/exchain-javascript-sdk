@@ -12,6 +12,12 @@ describe("crypto", () => {
     expect(address.length).toBe(41)
   })
 
+  it("getAddressFromPrivateKeyLegacy", () => {
+    const address = crypto.getAddressFromPrivateKeyLegacy(privateKey)
+    expect(address).toBe("ex1g7c3nvac7mjgn2m9mqllgat8wwd3aptd2947tz")
+    expect(address.length).toBe(41)
+  })
+
   it("getAddressFromPubKey", () => {
     const publicKey = crypto.getPubKeyHexFromPrivateKey(privateKey)
     const address = crypto.getAddressFromPubKey(publicKey)
