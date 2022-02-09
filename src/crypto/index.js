@@ -20,6 +20,10 @@ import createKeccakHash from "keccak"
 import Hash from "eth-lib/lib/hash"
 import BN from 'bn.js'
 
+import {
+  sha256ripemd160,
+} from "../utils"
+
 // 浏览器端实现
 const sync = require('./scrypt-sync')
 
@@ -259,6 +263,21 @@ export const getAddressFromPubKey = (publicKey, prefix) => {
     return encodeAddressToBech32(hash.slice(-20).toString('hex'), prefix)
 }
 
+export const getAddressFromPublicKeyLegacy = (publicKeyHex, prefix) => {
+  // const pubKey = ec.keyFromPublic(publicKeyHex, "hex")
+  // const pubPoint = pubKey.getPublic()
+  // const compressed = pubPoint.encodeCompressed()
+  // const hexed = ab2hexstring(compressed)
+  const hash = sha256ripemd160(publicKeyHex) // https://git.io/fAn8N
+  const address = encodeAddress(hash, prefix)
+  return address
+}
+
+export const encodeAddress = (value, prefix = "ex", type = "hex") => {
+  const words = bech32.toWords(Buffer.from(value, type))
+  return bech32.encode(prefix, words)
+}
+
 /**
  * Get address from private key.
  * @param {string} privateKeyHex the private key hexstring
@@ -267,6 +286,10 @@ export const getAddressFromPubKey = (publicKey, prefix) => {
  */
 export const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
   return getAddressFromPubKey(getPubKeyHexFromPrivateKey(privateKeyHex), prefix)
+}
+
+export const getAddressFromPrivateKeyLegacy = (privateKeyHex, prefix) => {
+  return getAddressFromPublicKeyLegacy(getPubKeyHexFromPrivateKey(privateKeyHex), prefix)
 }
 
 /**
