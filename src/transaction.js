@@ -27,7 +27,7 @@ class Transaction {
    * @param {String} address
    * @return {Transaction}
    **/
-  async sign(privateKeyHexOrSigner, msg, address) {
+  async sign(privateKeyHexOrSigner, msg, address, isPrivatekeyOldAddress) {
 
     const signMsg = {
       "account_number": this.account_number.toString(),
@@ -47,11 +47,12 @@ class Transaction {
       const jsonStr = JSON.stringify(signMsg)
       const signBytes = Buffer.from(jsonStr)
       const privateKey = Buffer.from(privateKeyHexOrSigner, "hex")
-      const signature = crypto.sign(signBytes.toString("hex"), privateKey)
+      const signature = isPrivatekeyOldAddress ? crypto.signPrivateKeyOldAddress(signBytes.toString("hex"), privateKey)
+          : crypto.sign(signBytes.toString("hex"), privateKey)
       const pubKey = crypto.encodePubKeyToCompressedBuffer(crypto.getPubKeyFromPrivateKey(privateKey))
       signatures = [{
         pub_key: {
-          type:"ethermint/PubKeyEthSecp256k1",
+          type: isPrivatekeyOldAddress ? "tendermint/PubKeySecp256k1" : "ethermint/PubKeyEthSecp256k1",
           value:pubKey},
         signature: signature,
       }]
