@@ -306,6 +306,19 @@ export const sign = (msgHex, privateKey) => {
 }
 
 /**
+ * Generates a signature (64 byte <r,s>) for a transaction based on given private key.
+ * @param {string} signBytesHex - Unsigned transaction sign bytes hexstring.
+ * @param {string | Buffer} privateKey - The private key.
+ * @return {Buffer} Signature. Does not include tx.
+ */
+export const signPrivateKeyOldAddress = (signBytesHex, privateKey) => {
+  const msgHash = sha256(signBytesHex)
+  const msgHashHex = Buffer.from(msgHash, "hex")
+  const signature = ecc.sign(msgHashHex, Buffer.from(privateKey, "hex")) // enc ignored if buffer
+  return signature
+}
+
+/**
  * Validate signature.
  * @param {string} sigHex signature in hex format
  * @param {string} msgHex msg in hex format.

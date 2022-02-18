@@ -107,7 +107,7 @@ export class OKEXChainClient {
      * @param {string} prefix
      * @return {OKEXChainClient}
      */
-    async setAccountInfo(privateKey, prefix = "ex") {
+    async setAccountInfo(privateKey, prefix = "ex", isPrivatekeyOld = 0) {
         if(!privateKey) {
             const address = await wallet.getAddress();
             if (!address) throw new Error("invalid privateKey: " + privateKey)
@@ -115,7 +115,10 @@ export class OKEXChainClient {
             return this;
         }
         if (privateKey !== this.privateKey) {
-            const address = crypto.getAddressFromPrivateKey(privateKey, prefix)
+            let address = crypto.getAddressFromPrivateKey(privateKey, prefix)
+            if (isPrivatekeyOld) {
+                address = crypto.getAddressFromPrivateKeyLegacy(privateKey, prefix)
+            }
             if (!address) throw new Error("invalid privateKey: " + privateKey)
             if (address === this.address) return this
             this.privateKey = privateKey
@@ -148,7 +151,7 @@ export class OKEXChainClient {
      * @return {Object} response
      */
 
-    async sendSendTransaction(to, amount, denom, memo = "", sequenceNumber = null) {
+    async sendSendTransaction(to, amount, denom, memo = "", sequenceNumber = null, isPrivatekeyOldAddress = 0) {
 
         if (to.slice(0, 2) === '0x') {
             to = crypto.encodeAddressToBech32(to)
@@ -172,7 +175,7 @@ export class OKEXChainClient {
         const signMsg = msg
 
 
-        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, sequenceNumber)
+        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, sequenceNumber, isPrivatekeyOldAddress)
         const res = await this.sendTransaction(signedTx)
         return res
     }
@@ -279,7 +282,7 @@ export class OKEXChainClient {
      * @param {Number} sequenceNumber
      * @return {Transaction} Transaction object
      */
-    async buildTransaction(msg, signMsg, memo = "", fee = null, sequenceNumber = null) {
+    async buildTransaction(msg, signMsg, memo = "", fee = null, sequenceNumber = null, isPrivatekeyOldAddress = 0) {
         if (!sequenceNumber) {
             const accountInfo = await this.getAccount()
             sequenceNumber = this.getSequenceNumberFromAccountInfo(accountInfo)
@@ -301,7 +304,7 @@ export class OKEXChainClient {
             return await tx.sign(this.signer, signMsg, this.address);
         }
         else {
-            return this.privateKey ? tx.sign(this.privateKey, signMsg) : tx.signByWallet(signMsg)
+            return this.privateKey ? tx.sign(this.privateKey, signMsg, '', isPrivatekeyOldAddress) : tx.signByWallet(signMsg)
         }
     }
 
