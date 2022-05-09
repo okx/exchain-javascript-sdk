@@ -180,6 +180,34 @@ export class OKEXChainClient {
         return res
     }
 
+    async ibcTransfer(to, amount, denom, memo = "", sequenceNumber = null,channel,revisionNumber, revesionHeight, isPrivatekeyOldAddress = 0) {
+        const coin = {
+            amount: this.formatNumber(amount),
+            denom: denom,
+
+        }
+
+        const msg = [{
+            type: "cosmos-sdk/MsgTransfer",
+            value: {
+                source_port: "transfer",
+                source_channel: channel,
+                token: coin,
+                sender: this.address,
+                receiver: to,
+                timeout_height: {
+                    revision_number: revisionNumber,
+                    revision_height: revesionHeight,
+                }
+            },
+        }]
+
+        const signMsg = msg
+        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, sequenceNumber, isPrivatekeyOldAddress)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
     /**
      * Send CancelOrderTransaction.
      * @param {String} orderId
