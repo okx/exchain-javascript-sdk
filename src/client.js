@@ -180,30 +180,26 @@ export class OKEXChainClient {
         return res
     }
 
-    async ibcTransfer(to, amount, denom, memo = "", sequenceNumber = null,channel,revisionNumber, revesionHeight, isPrivatekeyOldAddress = 0) {
-        const coin = {
-            amount: this.formatNumber(amount),
-            denom: denom,
+    async ibcTransfer(receiver, token, memo = "", sourceChannel,revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
 
-        }
 
         const msg = [{
             type: "cosmos-sdk/MsgTransfer",
             value: {
                 source_port: "transfer",
-                source_channel: channel,
-                token: coin,
+                source_channel: sourceChannel,
+                token: token,
                 sender: this.address,
-                receiver: to,
+                receiver: receiver,
                 timeout_height: {
                     revision_number: revisionNumber,
-                    revision_height: revesionHeight,
+                    revision_height: revisionHeight,
                 }
             },
         }]
 
         const signMsg = msg
-        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, sequenceNumber, isPrivatekeyOldAddress)
+        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, 0, isPrivatekeyOldAddress)
         const res = await this.sendTransaction(signedTx)
         return res
     }
@@ -326,6 +322,7 @@ export class OKEXChainClient {
             fee: fee,
         }
 
+        console.log(params)
         const tx = new Transaction(params)
 
         if (this.signer) {
@@ -365,6 +362,7 @@ export class OKEXChainClient {
             throw new Error("address should not be falsy")
         }
         try {
+            console.log(`${this.queryAccountUrl}/${address}`)
             const data = await this.httpClient.send("get", `${this.queryAccountUrl}/${address}`)
             return data
         } catch (err) {
@@ -424,6 +422,7 @@ export class OKEXChainClient {
      * @return {Number} accountNumber
      */
     getAccountNumberFromAccountInfo(accountInfo) {
+        console.log(accountInfo)
         return accountInfo.result.value.account_number
     }
 

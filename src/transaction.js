@@ -38,7 +38,7 @@ class Transaction {
       "sequence": this.sequence.toString(),
     }
 
-    console.log("signmsg: ",JSON.stringify(signMsg))
+    console.log(signMsg)
 
     let signatures;
 
@@ -116,8 +116,9 @@ class Transaction {
       return item
     })
     return JSON.stringify({
-      tx: stdTx,
+      // type: "cosmos-sdk/StdTx",
       mode: mode,
+      tx: stdTx,
     })
   }
 

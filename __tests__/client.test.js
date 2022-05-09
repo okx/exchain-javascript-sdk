@@ -39,17 +39,20 @@ describe("OKEXChainClient test", async () => {
     expect(res.length).toBeGreaterThanOrEqual(0)
   })
 
+
+
   it("send sendTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient(serverUrl, {
+    const client = new OKEXChainClient("http://192.168.2.200:36659", {
       chainId: chainId,
-      relativePath: "/okexchain-test/v1",
+      relativePath: "/exchain/v1",
       isMainnet: false
     })
-    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, '996')
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, '118')
     await client.setAccountInfo(privateKey)
     //console.log(client)
     const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    console.log(addr)
     const account = await client.getAccount(addr)
     const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
     // console.log(account, sequence)
@@ -58,24 +61,7 @@ describe("OKEXChainClient test", async () => {
     // expect(res.status).toBe(200)
   })
 
-  it("ibc transfer test", async ()=> {
-    jest.setTimeout(10000)
-    const client = new OKEXChainClient("http://127.0.0.1:36659", {
-      chainId: "exchain-101",
-      relativePath: "/exchain/v1",
-      isMainnet: false
-    })
 
-    const privateKey = crypto.getPrivateKeyFromMnemonic("giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool", '996')
-    await client.setAccountInfo(privateKey)
-    //console.log(client)
-    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
-    const account = await client.getAccount(addr)
-    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
-    // console.log(account, sequence)
-    const res = await client.ibcTransfer("cosmos1n064mg7jcxt2axur29mmek5ys7ghta4u4mhcjp", "2000000000000000000000", "wei", "hello world", sequence, "channel-0","1","10000")
-    console.log(JSON.stringify(res))
-  })
 
   it("send placeOrderTransaction,cancelOrderTransaction", async () => {
     jest.setTimeout(20000)
