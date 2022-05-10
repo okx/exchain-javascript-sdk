@@ -29,5 +29,51 @@ describe("okc ibc test", async () => {
         console.log(JSON.stringify(res))
     })
 
+    it("ibc query denom_hash", async () => {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryDenomHash('{"path":"transfer/channel-0","base_denom":"wei"}')
+        console.log(JSON.stringify(res))
+    })
+
+    it("ibc query denom_traces", async () => {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryDenomTraces()
+        console.log(JSON.stringify(res))
+    })
+
+    it("ibc query denom_trace", async () => {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryDenomTrace('CD3872E1E59BAA23BDAB04A829035D4988D6397569EC77F1DC991E4520D4092B')
+        console.log(JSON.stringify(res))
+    })
+
+    it("ibc query parmas", async () => {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryIbcParams()
+        console.log(JSON.stringify(res))
+    })
+
+
+
 
 })

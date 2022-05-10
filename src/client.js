@@ -40,6 +40,8 @@ const ibcFee = {
     gas: "2000000",
 }
 
+const denomHashUrl = '/ibc/apps/transfer/v1/denom_hashes'
+
 var defaultFee = defaultMainnetFee
 const precision = 18
 
@@ -119,7 +121,7 @@ export class OKEXChainClient {
      * @return {OKEXChainClient}
      */
     async setAccountInfo(privateKey, prefix = "ex", isPrivatekeyOld = 0) {
-        if(!privateKey) {
+        if (!privateKey) {
             const address = await wallet.getAddress();
             if (!address) throw new Error("invalid privateKey: " + privateKey)
             await this.setAccountInfoByWallet(address);
@@ -191,7 +193,7 @@ export class OKEXChainClient {
         return res
     }
 
-    async ibcTransfer(receiver, token, memo = "", sourceChannel,revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
+    async ibcTransfer(receiver, token, memo = "", sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
 
 
         const msg = [{
@@ -337,8 +339,7 @@ export class OKEXChainClient {
 
         if (this.signer) {
             return await tx.sign(this.signer, signMsg, this.address);
-        }
-        else {
+        } else {
             return this.privateKey ? tx.sign(this.privateKey, signMsg, '', isPrivatekeyOldAddress) : tx.signByWallet(signMsg)
         }
     }
@@ -935,6 +936,186 @@ export class OKEXChainClient {
 
         const signedTx = await this.buildTransaction(msg, msg, memo, defaultFee, sequenceNumber)
         const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+
+    async queryDenomHash(trace) {
+        const url = '/ibc/apps/transfer/v1/denom_hashes/' + trace
+        return this.httpClient.send("get", url)
+    }
+
+    async queryDenomTraces() {
+        const url = '/ibc/apps/transfer/v1/denom_traces'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryDenomTrace(hash) {
+        const url = '/ibc/apps/transfer/v1/denom_traces/' + hash
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryIbcParams() {
+        const url = '/ibc/apps/transfer/v1/params'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientParmas() {
+        const url = '/ibc/client/v1/params'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllClientStates() {
+        const url = '/ibc/core/client/v1/client_states'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientStates(clientId) {
+        const url = '/ibc/core/client/v1/client_states/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientStatus(clientId) {
+        const url = '/ibc/core/client/v1/client_status/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConsensusStates(clientId) {
+        const url = '/ibc/core/client/v1/consensus_states/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConsensusStatesByRevision(clientId, revisionNumber, revisionHeight) {
+        const url = '/ibc/core/client/v1/consensus_states/' + clientId + '/revision/' + revisionNumber + '/height/' + revisionHeight
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryUpgradedClientStates() {
+        const url = '/ibc/core/client/v1/upgraded_client_states'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryUpgradedConsensusStates() {
+        const url = '/ibc/core/client/v1/upgraded_consensus_states'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientConnections(clientId) {
+        const url = '/ibc/core/connection/v1/client_connections/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllConnections() {
+        const url = '/ibc/core/connection/v1/connections'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnection(connectionId) {
+        const url = '/ibc/core/connection/v1/connections/' + connectionId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnectionClientState(connectionId) {
+        const url = '/ibc/core/connection/v1/connections/' + connectionId + '/client_state'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnectionConsensusState(connectionId, revisionNumber, revisionHeight) {
+        const url = '/ibc/core/connection/v1/connections/' + connectionId + '/consensus_state/revision/' + revisionNumber + '/height/' + revisionHeight
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllChannels() {
+        const url = '/ibc/core/channel/v1/channels'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryChannel(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryChannelClientState(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId + '/cleint_state'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryChannelConsensusState(channelId, portId, revisionNumber, revisionHeight) {
+        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId + '/consensus_state/revision/' + revisionNumber + '/height/' + revisionHeight
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryNextSequenceReceive(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/next_sequence'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllPacketAcknowledgements(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_acknowledgements'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryPacketAcknowledgements(channelId, portId, sequence) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_acks/' + sequence
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryPacketCommitments(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryUnreceivedAcks(channelId, portId, ackSequences) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/'+ackSequences+'/unreceived_acks'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryUnreceivedPackets(channelId, portId, commitmentSquences) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/'+commitmentSquences+'/unreceived_packets'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryPacketCommitments(channelId, portId, sequence) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/' + sequence
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryPacketReceipts(channelId, portId, sequence) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_receipts/' + sequence
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnectionChannels(connectionId) {
+        const url = '/ibc/core/channel/v1/connections/'+connectionId+'/channels'
+        const res = await this.httpClient.send("get", url)
         return res
     }
 
