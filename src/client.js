@@ -29,6 +29,17 @@ const defaultMainnetFee = {
     }],
     gas: "200000",
 }
+
+
+const ibcFee = {
+    amount: [{
+        amount: "0.030000000000000000",
+        denom: "okt",
+
+    }],
+    gas: "2000000",
+}
+
 var defaultFee = defaultMainnetFee
 const precision = 18
 
@@ -186,20 +197,19 @@ export class OKEXChainClient {
         const msg = [{
             type: "cosmos-sdk/MsgTransfer",
             value: {
-                source_port: "transfer",
-                source_channel: sourceChannel,
-                token: token,
-                sender: this.address,
                 receiver: receiver,
+                sender: this.address,
+                source_channel: sourceChannel,
+                source_port: "transfer",
                 timeout_height: {
-                    revision_number: revisionNumber,
                     revision_height: revisionHeight,
-                }
+                    revision_number: revisionNumber,
+                },
+                token: token
             },
         }]
 
-        const signMsg = msg
-        const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, 0, isPrivatekeyOldAddress)
+        const signedTx = await this.buildTransaction(msg, msg, memo, ibcFee, 0, isPrivatekeyOldAddress)
         const res = await this.sendTransaction(signedTx)
         return res
     }

@@ -43,7 +43,7 @@ describe("OKEXChainClient test", async () => {
 
   it("send sendTransaction", async () => {
     jest.setTimeout(10000)
-    const client = new OKEXChainClient("http://192.168.2.200:36659", {
+    const client = new OKEXChainClient(serverUrl, {
       chainId: chainId,
       relativePath: "/exchain/v1",
       isMainnet: false
@@ -62,6 +62,25 @@ describe("OKEXChainClient test", async () => {
   })
 
 
+
+  it("send sendTransaction on dev", async () => {
+    jest.setTimeout(10000)
+    const client = new OKEXChainClient("http://127.0.0.1:36659", {
+      chainId: "exchain-101",
+      relativePath: "/exchain/v1",
+      isMainnet: false
+    })
+    const privateKey = crypto.getPrivateKeyFromMnemonic("giggle sibling fun arrow elevator spoon blood grocery laugh tortoise culture tool", '60')
+    await client.setAccountInfo(privateKey)
+    //console.log(client)
+    const addr = crypto.getAddressFromPrivateKey(client.privateKey)
+    const account = await client.getAccount(addr)
+    const sequence = parseInt((await client.getSequenceNumberFromAccountInfo(account)))
+    // console.log(account, sequence)
+    const res = await client.sendSendTransaction(toAddress, "100", "okt", "hello world", sequence)
+    console.log(JSON.stringify(res))
+    // expect(res.status).toBe(200)
+  })
 
   it("send placeOrderTransaction,cancelOrderTransaction", async () => {
     jest.setTimeout(20000)
