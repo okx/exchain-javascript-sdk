@@ -159,4 +159,46 @@ describe("okc ibc test", async () => {
         const res = await client.queryConnectionChannels('connection-0')
         console.log(JSON.stringify(res))
     })
+
+    it('query tx', async () => {
+        const client = new OKEXChainClient("http://127.0.0.1:36659", {
+            chainId: "exchain-101",
+            relativePath: "/exchain/v1",
+            isMainnet: false
+        })
+        const res = await client.queryTx('DD3E810A4767D80B4D44EB95F00D6FCDBAA60EBA94D31407786845FF2ED50F60')
+        console.log(JSON.stringify(res))
+    })
+
+    it('query txs', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:36659", {
+            chainId: "exchain-101",
+            relativePath: "/exchain/v1",
+            isMainnet: false
+        })
+
+        const res = await client.queryTxs({action: 'send', sender: 'ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u'})
+        console.log(JSON.stringify(res))
+    })
+
+    it("query header", async ()=>{
+        const client = new OKEXChainClient("http://127.0.0.1:36659", "http://127.0.0.1:36657",{
+            chainId: "exchain-101",
+            relativePath: "/exchain/v1",
+            isMainnet: false
+        })
+        const res = await client.queryHeader(1)
+        console.log(JSON.stringify(res))
+    })
+
+    it("query nodeState", async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:36659", "http://127.0.0.1:36657",{
+            chainId: "exchain-101",
+            relativePath: "/exchain/v1",
+            isMainnet: false
+        })
+        const res = await client.queryNodeState()
+        console.log(JSON.stringify(res))
+    })
+
 })

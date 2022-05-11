@@ -7,7 +7,9 @@
 import * as crypto from "./crypto"
 import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
+import RpcProxy from  "./rpcProxy"
 import * as wallet from './wallet'
+import {int32} from "protocol-buffers-encodings";
 
 const defaultChainId = "exchain-66"
 const defaultRelativePath = "/okexchain/v1"
@@ -66,11 +68,12 @@ export class OKEXChainClient {
      *     signer: external signer object, Object / null (default)
      * }
      */
-    constructor(url, config) {
+    constructor(url,rpcUrl = "127.0.0.1:26657", config) {
         if (!url) {
             throw new Error("null url")
         }
         this.httpClient = new HttpProxy(url)
+        this.rpcClient = new RpcProxy(rpcUrl)
         this.mode = mode
         this.chainId = (config && config.chainId) || defaultChainId
         this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
@@ -1012,4 +1015,35 @@ export class OKEXChainClient {
         return res
     }
 
+    async queryTx(hash) {
+        const res = await this.httpClient.send("get", this.PostUrl + "/" + hash)
+        return res
+    }
+
+    async queryTxs(event, page = 1,limit = 50,minHeight = 0, maxHeight = Number.MAX_SAFE_INTEGER) {
+        const url = this.PostUrl + '?message.action=' + event.action + '&message.sender=' + event.sender +'&page=' + page +'&limit=' + limit + '&tx.minheight=' + minHeight +'&tx.maxheight='+maxHeight
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryHeader(height = 1) {
+        const params = {
+            jsonrpc: "2.0",
+            id:0,
+            method:"commit",
+            params: {height: height.toString()}
+        }
+
+        const buf = JSON.stringify(params)
+        console.log(buf)
+        const opts = {
+            data: buf,
+            headers: {
+                "content-type": "text/plain",
+            }
+        }
+        const res = await this.rpcClient.send("post",null,null, opts)
+
+        return res
+    }
 }

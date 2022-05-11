@@ -1,4 +1,5 @@
 import axios from "axios"
+import {obj} from "pumpify";
 /**
  * HttpProxy
  */
@@ -92,3 +93,8 @@ class HttpProxy {
 }
 
 export default HttpProxy
+
+
+
+
+
