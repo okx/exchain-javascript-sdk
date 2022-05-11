@@ -29,16 +29,6 @@ describe("okc ibc test", async () => {
         console.log(JSON.stringify(res))
     })
 
-    it("ibc query denom_hash", async () => {
-        const client = new OKEXChainClient("http://127.0.0.1:10001", {
-            chainId: "ibc-1",
-            relativePath: "/",
-            isMainnet: false
-        })
-
-        const res = await client.queryDenomHash('{"path":"transfer/channel-0","base_denom":"wei"}')
-        console.log(JSON.stringify(res))
-    })
 
     it("ibc query denom_traces", async () => {
         const client = new OKEXChainClient("http://127.0.0.1:10001", {
@@ -73,7 +63,100 @@ describe("okc ibc test", async () => {
         console.log(JSON.stringify(res))
     })
 
+    it("ibc query AllClientStates", async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+        const res = await client.queryAllClientStates()
+        console.log(JSON.stringify(res))
+    })
+
+    it("ibc query clientState", async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+        const res = await client.queryClientStates('07-tendermint-0')
+        console.log(JSON.stringify(res))
+    })
+
+    it( 'ibc query clientConnections', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+        const res = await client.queryClientConnections('07-tendermint-0')
+        console.log(JSON.stringify(res))
+    })
+
+    it( 'ibc query all connections', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryAllConnections()
+        console.log(JSON.stringify(res))
+    })
+
+    it('ibc query connection', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryConnection('connection-0')
+        console.log(JSON.stringify(res))
+    })
+
+    it('query all channels', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryAllChannels()
+        console.log(JSON.stringify(res))
+    })
 
 
+    it('query  channel', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
 
+        const res = await client.queryChannel('channel-0','transfer')
+        console.log(JSON.stringify(res))
+    })
+
+    it('queryPacketCommitments', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryPacketCommitments('channel-0','transfer',0)
+        console.log(JSON.stringify(res))
+    })
+
+    it('queryConnectionChannels', async ()=> {
+        const client = new OKEXChainClient("http://127.0.0.1:10001", {
+            chainId: "ibc-1",
+            relativePath: "/",
+            isMainnet: false
+        })
+
+        const res = await client.queryConnectionChannels('connection-0')
+        console.log(JSON.stringify(res))
+    })
 })

@@ -939,12 +939,6 @@ export class OKEXChainClient {
         return res
     }
 
-
-    async queryDenomHash(trace) {
-        const url = '/ibc/apps/transfer/v1/denom_hashes/' + trace
-        return this.httpClient.send("get", url)
-    }
-
     async queryDenomTraces() {
         const url = '/ibc/apps/transfer/v1/denom_traces'
         const res = await this.httpClient.send("get", url)
@@ -963,11 +957,6 @@ export class OKEXChainClient {
         return res
     }
 
-    async queryClientParmas() {
-        const url = '/ibc/client/v1/params'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
 
     async queryAllClientStates() {
         const url = '/ibc/core/client/v1/client_states'
@@ -977,36 +966,6 @@ export class OKEXChainClient {
 
     async queryClientStates(clientId) {
         const url = '/ibc/core/client/v1/client_states/' + clientId
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryClientStatus(clientId) {
-        const url = '/ibc/core/client/v1/client_status/' + clientId
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryConsensusStates(clientId) {
-        const url = '/ibc/core/client/v1/consensus_states/' + clientId
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryConsensusStatesByRevision(clientId, revisionNumber, revisionHeight) {
-        const url = '/ibc/core/client/v1/consensus_states/' + clientId + '/revision/' + revisionNumber + '/height/' + revisionHeight
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryUpgradedClientStates() {
-        const url = '/ibc/core/client/v1/upgraded_client_states'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryUpgradedConsensusStates() {
-        const url = '/ibc/core/client/v1/upgraded_consensus_states'
         const res = await this.httpClient.send("get", url)
         return res
     }
@@ -1029,18 +988,6 @@ export class OKEXChainClient {
         return res
     }
 
-    async queryConnectionClientState(connectionId) {
-        const url = '/ibc/core/connection/v1/connections/' + connectionId + '/client_state'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryConnectionConsensusState(connectionId, revisionNumber, revisionHeight) {
-        const url = '/ibc/core/connection/v1/connections/' + connectionId + '/consensus_state/revision/' + revisionNumber + '/height/' + revisionHeight
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
     async queryAllChannels() {
         const url = '/ibc/core/channel/v1/channels'
         const res = await this.httpClient.send("get", url)
@@ -1053,62 +1000,8 @@ export class OKEXChainClient {
         return res
     }
 
-    async queryChannelClientState(channelId, portId) {
-        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId + '/cleint_state'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryChannelConsensusState(channelId, portId, revisionNumber, revisionHeight) {
-        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId + '/consensus_state/revision/' + revisionNumber + '/height/' + revisionHeight
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryNextSequenceReceive(channelId, portId) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/next_sequence'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryAllPacketAcknowledgements(channelId, portId) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_acknowledgements'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryPacketAcknowledgements(channelId, portId, sequence) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_acks/' + sequence
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryPacketCommitments(channelId, portId) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryUnreceivedAcks(channelId, portId, ackSequences) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/'+ackSequences+'/unreceived_acks'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryUnreceivedPackets(channelId, portId, commitmentSquences) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/'+commitmentSquences+'/unreceived_packets'
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
     async queryPacketCommitments(channelId, portId, sequence) {
         const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/' + sequence
-        const res = await this.httpClient.send("get", url)
-        return res
-    }
-
-    async queryPacketReceipts(channelId, portId, sequence) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_receipts/' + sequence
         const res = await this.httpClient.send("get", url)
         return res
     }
