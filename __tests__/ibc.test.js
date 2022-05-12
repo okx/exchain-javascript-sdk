@@ -161,23 +161,23 @@ describe("okc ibc test", async () => {
     })
 
     it('query tx', async () => {
-        const client = new OKEXChainClient("http://127.0.0.1:36659", {
+        const client = new OKEXChainClient("http://127.0.0.1:36659",null, {
             chainId: "exchain-101",
             relativePath: "/exchain/v1",
             isMainnet: false
         })
-        const res = await client.queryTx('DD3E810A4767D80B4D44EB95F00D6FCDBAA60EBA94D31407786845FF2ED50F60')
+        const res = await client.queryTx('D7702BCC93BC3CA3C16EB0F9B1F945D33D1860B931B78FDDB6F0517B120E5E91')
         console.log(JSON.stringify(res))
     })
 
     it('query txs', async ()=> {
-        const client = new OKEXChainClient("http://127.0.0.1:36659", {
+        const client = new OKEXChainClient("http://127.0.0.1:36659", null,{
             chainId: "exchain-101",
             relativePath: "/exchain/v1",
             isMainnet: false
         })
 
-        const res = await client.queryTxs({action: 'send', sender: 'ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u'})
+        const res = await client.queryTxs({action: 'transfer', sender: 'ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u'})
         console.log(JSON.stringify(res))
     })
 
