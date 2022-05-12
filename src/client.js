@@ -68,7 +68,7 @@ export class OKEXChainClient {
      *     signer: external signer object, Object / null (default)
      * }
      */
-    constructor(url,rpcUrl = "127.0.0.1:26657", config) {
+    constructor(url, config,rpcUrl = "127.0.0.1:26657") {
         if (!url) {
             throw new Error("null url")
         }
