@@ -198,7 +198,6 @@ export class OKEXChainClient {
 
     async ibcTransfer(receiver, token, memo = "", sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
 
-
         const msg = [{
             type: "cosmos-sdk/MsgTransfer",
             value: {
