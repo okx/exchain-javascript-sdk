@@ -35,7 +35,7 @@ const defaultMainnetFee = {
 
 const ibcFee = {
     amount: [{
-        amount: "0.00030000000000000",
+        amount: "0.030000000000000000",
         denom: "okt",
 
     }],
@@ -197,6 +197,7 @@ export class OKEXChainClient {
     }
 
     async ibcTransfer(receiver, token, memo = "", sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
+
         const msg = [{
             type: "cosmos-sdk/MsgTransfer",
             value: {
