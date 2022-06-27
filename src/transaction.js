@@ -38,7 +38,7 @@ class Transaction {
       "sequence": this.sequence.toString(),
     }
 
-    console.log("signmsg: ",JSON.stringify(signMsg))
+    console.log(signMsg)
 
     let signatures;
 
@@ -59,8 +59,8 @@ class Transaction {
     }
     // External Signer
     if (typeof privateKeyHexOrSigner === 'object') {
-        let result  =  await privateKeyHexOrSigner.sign(signMsg, address);
-        signatures = result.signatures;
+      let result  =  await privateKeyHexOrSigner.sign(signMsg, address);
+      signatures = result.signatures;
     }
 
     this.signatures = signatures;
@@ -106,9 +106,9 @@ class Transaction {
 
     const stdTx = {
       msg: this.msgs,
+      fee: this.fee,
       signatures: this.signatures,
       memo: this.memo,
-      fee: this.fee,
     }
     stdTx.signatures = stdTx.signatures.map((item) => {
       item.pub_key.value=item.pub_key.value.toString("base64")
@@ -116,8 +116,9 @@ class Transaction {
       return item
     })
     return JSON.stringify({
-      tx: stdTx,
       mode: mode,
+      type: "cosmos-sdk/StdTx",
+      tx: stdTx,
     })
   }
 

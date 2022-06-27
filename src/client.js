@@ -7,7 +7,9 @@
 import * as crypto from "./crypto"
 import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
+import RpcProxy from  "./rpcProxy"
 import * as wallet from './wallet'
+import {int32} from "protocol-buffers-encodings";
 
 const defaultChainId = "exchain-66"
 const defaultRelativePath = "/okexchain/v1"
@@ -29,6 +31,19 @@ const defaultMainnetFee = {
     }],
     gas: "200000",
 }
+
+
+const ibcFee = {
+    amount: [{
+        amount: "0.030000000000000000",
+        denom: "okt",
+
+    }],
+    gas: "2000000",
+}
+
+const denomHashUrl = '/ibc/apps/transfer/v1/denom_hashes'
+
 var defaultFee = defaultMainnetFee
 const precision = 18
 
@@ -53,11 +68,12 @@ export class OKEXChainClient {
      *     signer: external signer object, Object / null (default)
      * }
      */
-    constructor(url, config) {
+    constructor(url, config,rpcUrl = "127.0.0.1:26657") {
         if (!url) {
             throw new Error("null url")
         }
         this.httpClient = new HttpProxy(url)
+        this.rpcClient = new RpcProxy(rpcUrl)
         this.mode = mode
         this.chainId = (config && config.chainId) || defaultChainId
         this.PostUrl = ((config && config.relativePath) || defaultRelativePath) + "/txs"
@@ -108,7 +124,7 @@ export class OKEXChainClient {
      * @return {OKEXChainClient}
      */
     async setAccountInfo(privateKey, prefix = "ex", isPrivatekeyOld = 0) {
-        if(!privateKey) {
+        if (!privateKey) {
             const address = await wallet.getAddress();
             if (!address) throw new Error("invalid privateKey: " + privateKey)
             await this.setAccountInfoByWallet(address);
@@ -176,6 +192,29 @@ export class OKEXChainClient {
 
 
         const signedTx = await this.buildTransaction(msg, signMsg, memo, defaultFee, sequenceNumber, isPrivatekeyOldAddress)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    async ibcTransfer(receiver, token, memo = "", sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
+
+
+        const msg = [{
+            type: "cosmos-sdk/MsgTransfer",
+            value: {
+                receiver: receiver,
+                sender: this.address,
+                source_channel: sourceChannel,
+                source_port: "transfer",
+                timeout_height: {
+                    revision_height: revisionHeight,
+                    revision_number: revisionNumber,
+                },
+                token: token
+            },
+        }]
+
+        const signedTx = await this.buildTransaction(msg, msg, memo, ibcFee, 0, isPrivatekeyOldAddress)
         const res = await this.sendTransaction(signedTx)
         return res
     }
@@ -298,12 +337,12 @@ export class OKEXChainClient {
             fee: fee,
         }
 
+        console.log(params)
         const tx = new Transaction(params)
 
         if (this.signer) {
             return await tx.sign(this.signer, signMsg, this.address);
-        }
-        else {
+        } else {
             return this.privateKey ? tx.sign(this.privateKey, signMsg, '', isPrivatekeyOldAddress) : tx.signByWallet(signMsg)
         }
     }
@@ -337,6 +376,7 @@ export class OKEXChainClient {
             throw new Error("address should not be falsy")
         }
         try {
+            console.log(`${this.queryAccountUrl}/${address}`)
             const data = await this.httpClient.send("get", `${this.queryAccountUrl}/${address}`)
             return data
         } catch (err) {
@@ -396,6 +436,7 @@ export class OKEXChainClient {
      * @return {Number} accountNumber
      */
     getAccountNumberFromAccountInfo(accountInfo) {
+        console.log(accountInfo)
         return accountInfo.result.value.account_number
     }
 
@@ -901,4 +942,108 @@ export class OKEXChainClient {
         return res
     }
 
+    async queryDenomTraces() {
+        const url = '/ibc/apps/transfer/v1/denom_traces'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryDenomTrace(hash) {
+        const url = '/ibc/apps/transfer/v1/denom_traces/' + hash
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryIbcParams() {
+        const url = '/ibc/apps/transfer/v1/params'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+
+    async queryAllClientStates() {
+        const url = '/ibc/core/client/v1/client_states'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientStates(clientId) {
+        const url = '/ibc/core/client/v1/client_states/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryClientConnections(clientId) {
+        const url = '/ibc/core/connection/v1/client_connections/' + clientId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllConnections() {
+        const url = '/ibc/core/connection/v1/connections'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnection(connectionId) {
+        const url = '/ibc/core/connection/v1/connections/' + connectionId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryAllChannels() {
+        const url = '/ibc/core/channel/v1/channels'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryChannel(channelId, portId) {
+        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryPacketCommitments(channelId, portId, sequence) {
+        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/' + sequence
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryConnectionChannels(connectionId) {
+        const url = '/ibc/core/channel/v1/connections/'+connectionId+'/channels'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryTx(hash) {
+        const res = await this.httpClient.send("get", this.PostUrl + "/" + hash)
+        return res
+    }
+
+    async queryTxs(event, page = 1,limit = 50,minHeight = 0, maxHeight = Number.MAX_SAFE_INTEGER) {
+        const url = this.PostUrl + '?message.action=' + event.action + '&message.sender=' + event.sender +'&page=' + page +'&limit=' + limit + '&tx.minheight=' + minHeight +'&tx.maxheight='+maxHeight
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryHeader(height = 1) {
+        const params = {
+            jsonrpc: "2.0",
+            id:0,
+            method:"commit",
+            params: {height: height.toString()}
+        }
+
+        const buf = JSON.stringify(params)
+        console.log(buf)
+        const opts = {
+            data: buf,
+            headers: {
+                "content-type": "text/plain",
+            }
+        }
+        const res = await this.rpcClient.send("post",null,null, opts)
+
+        return res
+    }
 }

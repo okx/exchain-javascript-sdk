@@ -1,4 +1,5 @@
 import axios from "axios"
+import {obj} from "pumpify";
 /**
  * HttpProxy
  */
@@ -9,6 +10,7 @@ class HttpProxy {
 
   send(method, path, params, opts) {
     const paramsObj = { method, url: path, ...opts }
+      console.log(paramsObj)
     if (params) {
       method === "get" ? paramsObj.params = params : paramsObj.data = params
     }
@@ -91,3 +93,8 @@ class HttpProxy {
 }
 
 export default HttpProxy
+
+
+
+
+
