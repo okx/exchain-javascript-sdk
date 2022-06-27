@@ -37,6 +37,7 @@
         * [.sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmLockTransaction) ⇒ <code>Object</code>
         * [.sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmUnLockTransaction) ⇒ <code>Object</code>
         * [.sendFarmClaimTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmClaimTransaction) ⇒ <code>Object</code>
+        * [.ibcTransfer(to, amount, denom, memo , sequenceNumber, isPrivatekeyOldAddress)](#module_client.OKEXChainClient+ibcTransfer) ⇒  <code>  Object</code>
 
 <a name="module_client.OKEXChainClient"></a>
 
@@ -79,6 +80,9 @@ The OKEXChain client.
     * [.sendFarmLockTransaction(pool_name, lock_denom, lock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmLockTransaction) ⇒ <code>Object</code>
     * [.sendFarmUnLockTransaction(pool_name, unlock_denom, unlock_amount, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmUnLockTransaction) ⇒ <code>Object</code>
     * [.sendFarmClaimTransaction(pool_name, memo, sequenceNumber)](#module_client.OKEXChainClient+sendFarmClaimTransaction) ⇒ <code>Object</code>
+    [.ibcTransfer(receiver, token, memo, sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress)]((#module_client.OKEXChainClient+ibcTransfer))⇒ <code>Object</code>
+
+
 
 <a name="new_module_client.OKEXChainClient_new"></a>
 
@@ -554,4 +558,20 @@ Send FarmClaimTransaction.
 | pool_name | <code>String</code> |  | 
 | memo | <code>String</code> |  | 
 | sequenceNumber | <code>Number</code> | <code></code> | 
+#### okexChainClient.ibcTransfer(receiver, token, memo, sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress)⇒ <code>Object</code>
+ibcTransfer
+
+**Kind**: instance method of [<code>OKEXChainClient</code>](#module_client.OKEXChainClient)  
+**Returns**: <code>Object</code> - response  
+
+| Param | Type | Default | Remark |
+| --- | --- | --- | --- |
+| receiver | <code>String</code> |  |  |
+| Token | <code>String</code> |  |  |
+| sourceChannel | <code>String</code> | <code></code> |  |
+| revisionNumber | <code>String</code> |  | The target chain-id, like "okc-100", typing "100" |
+| revisionHeight | <code>String</code> |  | Timeout Height |
+| isPrivatekeyOldAddress | <code>Number</code> | 0 |  |
+| memo | <code>String</code> |  |  |
+|  |  |  |  |
 
