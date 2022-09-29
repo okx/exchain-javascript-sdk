@@ -7,8 +7,10 @@
 import * as crypto from "./crypto"
 import Transaction from "./transaction"
 import HttpProxy from "./httpProxy"
-import RpcProxy from  "./rpcProxy"
+import RpcProxy from "./rpcProxy"
 import * as wallet from './wallet'
+
+
 import {int32} from "protocol-buffers-encodings";
 
 const defaultChainId = "exchain-66"
@@ -47,6 +49,16 @@ const denomHashUrl = '/ibc/apps/transfer/v1/denom_hashes'
 var defaultFee = defaultMainnetFee
 const precision = 18
 
+String.prototype.toBytes = function (encoding) {
+    var bytes = [];
+    var buff = new Buffer(this, encoding);
+    for (var i = 0; i < buff.length; i++) {
+        var byteint = buff[i];
+        bytes.push(byteint);
+    }
+    return bytes;
+}
+
 
 export const GetClient = async (privateKey, url) => {
     const client = new OKEXChainClient(url)
@@ -68,7 +80,7 @@ export class OKEXChainClient {
      *     signer: external signer object, Object / null (default)
      * }
      */
-    constructor(url, config,rpcUrl = "127.0.0.1:26657") {
+    constructor(url, config, rpcUrl = "127.0.0.1:26657") {
         if (!url) {
             throw new Error("null url")
         }
@@ -80,6 +92,7 @@ export class OKEXChainClient {
         this.queryAccountUrl = ((config && config.relativePath) || defaultRelativePath) + "/auth/accounts"
         this.isMainnet = (config && config.isMainnet) || false
         this.signer = (config && config.signer) || null
+        this.restPrefix = config.relativePath
 
         if (this.isMainnet) {
             defaultFee = defaultMainnetFee
@@ -196,6 +209,17 @@ export class OKEXChainClient {
         return res
     }
 
+    /**
+     * send ibc transfer transction
+     * @param receiver
+     * @param token
+     * @param memo
+     * @param sourceChannel
+     * @param revisionNumber
+     * @param revisionHeight
+     * @param isPrivatekeyOldAddress
+     * @returns {Promise<*>}
+     */
     async ibcTransfer(receiver, token, memo = "", sourceChannel, revisionNumber, revisionHeight, isPrivatekeyOldAddress = 0) {
 
         const msg = [{
@@ -941,6 +965,201 @@ export class OKEXChainClient {
         return res
     }
 
+
+    /**
+     * store wasm code on the chain
+     * @param wasmFile
+     * @param permission
+     * @param seqNo
+     * @param fee
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async storeCode(wasmFile, permission, seqNo, fee) {
+        var fs = require("fs");
+        var pako = require("pako")
+        const wasmCode = fs.readFileSync(wasmFile)
+        const compressed = pako.gzip(wasmCode, {level: 9});
+        const msg = [{
+            type: "wasm/MsgStoreCode",
+            value: {
+                instantiate_permission: permission,
+                sender: this.address,
+                wasm_byte_code: Buffer.from(compressed).toString('base64'),
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "store wasm code", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * instantiate contract
+     * @param codeId
+     * @param label
+     * @param initMsg
+     * @param amount
+     * @param admin
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async instantiateContract(codeId, label, initMsg, amount, admin, fee, seqNo) {
+        const msg = [{
+            type: "wasm/MsgInstantiateContract",
+            value: {
+                admin: admin,
+                code_id: codeId,
+                funds: amount,
+                label: label,
+                msg: initMsg,
+                sender: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "instantiate wasm code", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * execute contract
+     * @param contractAddr
+     * @param execMsg
+     * @param amount
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async executeContract(contractAddr, execMsg, amount, fee, seqNo) {
+        const msg = [{
+            type: "wasm/MsgExecuteContract",
+            value: {
+                contract: contractAddr,
+                funds: amount,
+                msg: execMsg,
+                sender: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "execute contract", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * migrate contract
+     * @param codeId
+     * @param contractAddr
+     * @param migrateMsg
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async migrateContract(codeId, contractAddr, migrateMsg, fee, seqNo) {
+        const msg = [{
+            type: "wasm/MsgMigrateContract",
+            value: {
+                code_id: codeId,
+                contract: contractAddr,
+                msg: migrateMsg,
+                sender: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "migrate Contract ", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+
+    /**
+     * update contract admin
+     * @param contractAddr
+     * @param newAdminAddr
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async updateContractAdmin(contractAddr, newAdminAddr, fee, seqNo) {
+        const msg = [{
+            type: "wasm/MsgUpdateAdmin",
+            value: {
+                contract: contractAddr,
+                new_admin: newAdminAddr,
+                sender: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "update Contract Admin", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * clear contract admin
+     * @param contractAddr
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async clearContractAdmin(contractAddr, fee, seqNo) {
+        const msg = [{
+            type: "wasm/MsgClearAdmin",
+            value: {
+                contract: contractAddr,
+                sender: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "clear Contract Admin", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+
+    async queryListCode() {
+        const url = this.restPrefix + '/wasm/code'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryCode(codeId) {
+        const url = this.restPrefix + '/wasm/code/' + codeId
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryListContracts(codeId) {
+        const url = this.restPrefix + '/wasm/code/' + codeId + '/contracts'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryContract(contractAddr) {
+        const url = this.restPrefix + '/wasm/contract/' + contractAddr
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryContractStateAll(contractAddr) {
+        const url = this.restPrefix + '/wasm/contract/' + contractAddr + '/state'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryContractHistory(contractAddr) {
+        const url = this.restPrefix + '/wasm/contract/' + contractAddr + '/history'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryContractStateSmart(contractAddr, query) {
+        const url = this.restPrefix + '/wasm/contract/' + contractAddr + '/smart/' + Buffer.from(query).toString("base64") + '?encoding=base64'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryContractStateRaw(contractAddr, key) {
+        const url = this.restPrefix + '/wasm/contract/' + contractAddr + '/raw/' + Buffer.from(key).toString("hex") + '?encoding=hex'
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
     async queryDenomTraces() {
         const url = '/ibc/apps/transfer/v1/denom_traces'
         const res = await this.httpClient.send("get", url)
@@ -1003,13 +1222,13 @@ export class OKEXChainClient {
     }
 
     async queryPacketCommitments(channelId, portId, sequence) {
-        const url = '/ibc/core/channel/v1/channels/'+channelId+'/ports/'+portId+'/packet_commitments/' + sequence
+        const url = '/ibc/core/channel/v1/channels/' + channelId + '/ports/' + portId + '/packet_commitments/' + sequence
         const res = await this.httpClient.send("get", url)
         return res
     }
 
     async queryConnectionChannels(connectionId) {
-        const url = '/ibc/core/channel/v1/connections/'+connectionId+'/channels'
+        const url = '/ibc/core/channel/v1/connections/' + connectionId + '/channels'
         const res = await this.httpClient.send("get", url)
         return res
     }
@@ -1019,8 +1238,8 @@ export class OKEXChainClient {
         return res
     }
 
-    async queryTxs(event, page = 1,limit = 50,minHeight = 0, maxHeight = Number.MAX_SAFE_INTEGER) {
-        const url = this.PostUrl + '?message.action=' + event.action + '&message.sender=' + event.sender +'&page=' + page +'&limit=' + limit + '&tx.minheight=' + minHeight +'&tx.maxheight='+maxHeight
+    async queryTxs(event, page = 1, limit = 50, minHeight = 0, maxHeight = Number.MAX_SAFE_INTEGER) {
+        const url = this.PostUrl + '?message.action=' + event.action + '&message.sender=' + event.sender + '&page=' + page + '&limit=' + limit + '&tx.minheight=' + minHeight + '&tx.maxheight=' + maxHeight
         const res = await this.httpClient.send("get", url)
         return res
     }
@@ -1028,8 +1247,8 @@ export class OKEXChainClient {
     async queryHeader(height = 1) {
         const params = {
             jsonrpc: "2.0",
-            id:0,
-            method:"commit",
+            id: 0,
+            method: "commit",
             params: {height: height.toString()}
         }
 
@@ -1041,8 +1260,10 @@ export class OKEXChainClient {
                 "content-type": "text/plain",
             }
         }
-        const res = await this.rpcClient.send("post",null,null, opts)
+        const res = await this.rpcClient.send("post", null, null, opts)
 
         return res
     }
+
+
 }
