@@ -13,6 +13,9 @@
     "sdk": "webpack-dev-server --config build/webpack.config.sdk.js"
   },
   "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.29.0",
+    "@cosmjs/proto-signing": "^0.29.0",
+    "@cosmjs/stargate": "^0.29.0",
     "@walletconnect/client": "1.3.3",
     "axios": "^0.18.1",
     "babel-polyfill": "^6.26.0",
@@ -32,6 +35,7 @@
     "lodash": "^4.17.21",
     "ndjson": "^1.5.0",
     "protocol-buffers-encodings": "^1.1.1",
+    "pako": "^2.0.4",
     "pumpify": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "schema": "^0.2.1",
