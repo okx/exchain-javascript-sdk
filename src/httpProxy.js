@@ -5,6 +5,7 @@ import {obj} from "pumpify";
  */
 class HttpProxy {
   constructor(baseURL){
+      axios.defaults.timeout = 300000
     this.httpClient = axios.create({ baseURL }) // withCredentials: true
   }
 
