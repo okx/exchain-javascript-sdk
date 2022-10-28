@@ -1112,6 +1112,98 @@ export class OKEXChainClient {
     }
 
 
+    /**
+     * register FeeSplit
+     * @param contractAddress
+     * @param withdrawerAddress
+     * @param nonces
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async registerFeeSplit(contractAddress, withdrawerAddress, nonces, fee, seqNo) {
+        if (withdrawerAddress == '') {
+            withdrawerAddress = this.address
+        }
+
+        const msg = [{
+            type: "okexchain/MsgRegisterFeeSplit",
+            value: {
+                contract_address: contractAddress,
+                deployer_address: this.address,
+                nonces: nonces,
+                withdrawer_address: withdrawerAddress,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "register feesplit", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * update FeeSplit
+     * @param contractAddress
+     * @param withdrawerAddress
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async updateFeeSplit(contractAddress, withdrawerAddress, fee, seqNo) {
+        if (withdrawerAddress == '') {
+            withdrawerAddress = this.address
+        }
+
+        const msg = [{
+            type: "okexchain/MsgUpdateFeeSplit",
+            value: {
+                contract_address: contractAddress,
+                deployer_address: this.address,
+                withdrawer_address: withdrawerAddress,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "update feesplit", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    /**
+     * cancel FeeSplit
+     * @param contractAddress
+     * @param fee
+     * @param seqNo
+     * @returns {Promise<{result: *, status: *}|{result: {msg: string, code: number, detail_msg: string, data: string}, status: *}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}|{result: {msg, code: number, detail_msg: string, data: string}, status: number}>}
+     */
+    async cancelFeeSplit(contractAddress, fee, seqNo) {
+        const msg = [{
+            type: "okexchain/MsgCancelFeeSplit",
+            value: {
+                contract_address: contractAddress,
+                deployer_address: this.address,
+            }
+        }]
+        const signedTx = await this.buildTransaction(msg, msg, "cancel feesplit", fee, seqNo)
+        const res = await this.sendTransaction(signedTx)
+        return res
+    }
+
+    async queryFeesplit(contractAddress) {
+        const url = this.restPrefix + '/feesplit/contract/'+contractAddress
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryDeployerFeeSplits(deployerAddress, page, limit) {
+        const url = this.restPrefix + '/feesplit/deployer/'+deployerAddress + '?page='+page + '&limit='+limit
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
+    async queryWithdrawerFeeSplits(withdrawerAddress, page, limit) {
+        const url = this.restPrefix + '/feesplit/withdrawer/'+withdrawerAddress + '?page='+page + '&limit='+limit
+        const res = await this.httpClient.send("get", url)
+        return res
+    }
+
     async queryListCode() {
         const url = this.restPrefix + '/wasm/code'
         const res = await this.httpClient.send("get", url)
