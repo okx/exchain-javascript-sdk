@@ -12,6 +12,7 @@ import * as crypto from "../crypto";
 import {encodePubKeyToCompressedBuffer} from "../crypto";
 import {Buffer} from "buffer";
 import {re} from "@babel/core/lib/vendor/import-meta-resolve";
+import * as web3 from "web3"
 
 /**
  * A wallet that holds a single secp256k1 keypair.
@@ -58,11 +59,14 @@ class OKCSecp256k1Wallet {
         if (signerAddress !== this.address) {
             throw new Error(`Address ${signerAddress} not found in wallet`);
         }
-        const message = new crypto_1.Sha256((0, signdoc_1.serializeSignDoc)(signDoc)).digest();
-        const signature = await crypto_1.Secp256k1.createSignature(message, this.privkey);
+        const message = web3.default.utils.sha3(Buffer.from((0, signdoc_1.serializeSignDoc)(signDoc)))
+
+        // const message = new crypto_1.Sha256((0, signdoc_1.serializeSignDoc)(signDoc)).digest();
+        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2),'hex')), this.privkey);
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
-        console.log(JSON.stringify(signDoc))
-        console.log(JSON.stringify((1, signature_1.encodeSecp256k1Signature)(this.pubkey, signatureBytes)))
+
+        console.log('hash：',Buffer.from(message).toString('hex'));
+        console.log(JSON.stringify((0, signature_1.encodeSecp256k1Signature)(this.pubkey, signatureBytes)))
         console.log(this.pubkey)
         return {
             signed: signDoc, signature: (0, signature_1.encodeSecp256k1Signature)(this.pubkey, signatureBytes),

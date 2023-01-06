@@ -13,7 +13,7 @@ const addr = "ex1qj5c07sm6jetjz8f509qtrxgh4psxkv3ddyq7u"
 const mnemonic2 = "antique onion adult slot sad dizzy sure among cement demise submit scare"
 const addr2 = "ex1fsfwwvl93qv6r56jpu084hxxzn9zphnyxhske5"
 
-describe("okc wasm test", async function() {
+describe("okc wasm test",  function() {
 
     it("store wasm code ", async ()=> {
         jest.setTimeout(300000)
