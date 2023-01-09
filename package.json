@@ -1,6 +1,6 @@
 {
   "name": "@okexchain/javascript-sdk",
-  "version": "1.6.7.2",
+  "version": "1.6.7",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "scripts": {
