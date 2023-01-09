@@ -988,6 +988,7 @@ export class OKEXChainClient {
             }
         }]
         const signedTx = await this.buildTransaction(msg, msg, "store wasm code", fee, seqNo)
+        console.log(signedTx)
         const res = await this.sendTransaction(signedTx)
         return res
     }
