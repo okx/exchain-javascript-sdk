@@ -119,6 +119,7 @@ class Transaction {
       mode: mode,
       type: "cosmos-sdk/StdTx",
       tx: stdTx,
+      nonce: this.sequence.toString(),
     })
   }
 
