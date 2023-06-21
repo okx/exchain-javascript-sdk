@@ -36,7 +36,8 @@ class OKCSecp256k1Wallet {
     }
 
     get address() {
-        return crypto.getAddressFromPrivateKey(Buffer.from(this.privkey).toString('hex'))
+        const bech32 = crypto.getAddressFromPrivateKey(Buffer.from(this.privkey).toString('hex'))
+        return crypto.convertBech32ToHex(this.bech32)[0]
     }
 
     async getAccounts() {
@@ -50,7 +51,7 @@ class OKCSecp256k1Wallet {
             throw new Error(`Address ${signerAddress} not found in wallet`);
         }
         const message = web3.default.utils.sha3(Buffer.from((0, signdoc_1.serializeSignDoc)(signDoc)))
-        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2),'hex')), this.privkey);
+        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2), 'hex')), this.privkey);
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
         return {
             signed: signDoc, signature: (0, signature_1.encodeSecp256k1Signature)(this.pubkey, signatureBytes),
