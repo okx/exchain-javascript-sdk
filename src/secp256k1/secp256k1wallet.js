@@ -28,16 +28,16 @@ class OKCSecp256k1Wallet {
      * Creates a Secp256k1Wallet from the given private key
      *
      * @param privkey The private key.
-     * @param prefix The bech32 address prefix (human readable part). Defaults to "cosmos".
+     * @param prefix The bech32 address prefix (human readable part). Defaults to "ex".
      */
-    static async fromKey(privkey, prefix = "cosmos") {
+    static async fromKey(privkey, prefix = "ex") {
         const pk = crypto.encodePubKeyToCompressedBuffer(crypto.getPubKeyFromPrivateKey(privkey))
         return new OKCSecp256k1Wallet(privkey, Uint8Array.from(pk), prefix)
     }
 
     get address() {
         const bech32 = crypto.getAddressFromPrivateKey(Buffer.from(this.privkey).toString('hex'))
-        return crypto.convertBech32ToHex(this.bech32)[0]
+        return crypto.convertBech32ToHex(bech32)[0]
     }
 
     async getAccounts() {
